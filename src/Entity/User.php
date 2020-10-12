@@ -23,7 +23,9 @@ class User implements UserInterface
     public function prePersist()
     {
         $this->setIsActive(true);
-        $this->setDateCreated(new \DateTime());
+        if (empty($this->getDateCreated())) {
+            $this->setDateCreated(new \DateTime());
+        }
     }
 
     /**
@@ -92,7 +94,7 @@ class User implements UserInterface
      *     max=20,
      *     maxMessage="Votre téléphone devrait avoir maximum {{limit}} caractères !"
      * )
-     * @Assert\Regex(pattern="/^[0-9\s.-]{8,20}$/", match=true, message="Votre téléphone devrait contenir entre 8 et 20 chiffres, espaces, points et tirets")
+     * @Assert\Regex(pattern="/^[0-9\s.+-]{8,20}$/", match=true, message="Votre téléphone devrait contenir entre 8 et 20 chiffres, espaces . - et +")
 
      * @ORM\Column(type="string", length=20)
      */
