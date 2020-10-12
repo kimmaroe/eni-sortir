@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}Sortir.com{% endblock %}</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a class="main-logo" href="{{ path('home') }}" title="Retour à l'accueil">Sortir.com</a>
+            <nav>
+                <a href="{{ path('home') }}" title="Retour à l'accueil">Accueil</a>
+                {% if app.user %}
+                    <a href="{{ path('app_logout') }}" title="Déconnexion">Déconnexion</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" title="Connexion">Connexion</a>
+                    <a href="{{ path('app_register') }}" title="Créer un compte">Créer un compte</a>
+                {% endif %}
+            </nav>
+        </header>
+        <main>
+            {% block main %}{% endblock %}
+        </main>
+        <footer>
+            &copy; Sortir.com {{ "now"|date("Y") }}
+        </footer>
+    </div>
+</body>
+</html>
