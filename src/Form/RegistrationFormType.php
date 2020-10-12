@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
@@ -18,7 +19,11 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('email')
+            ->add('lastName', null, ['label' => 'Nom de famille'])
+            ->add('firstName', null, ['label' => 'Prénom'])
+            ->add('phone', null, ['label' => 'Téléphone'])
             ->add('plainPassword', PasswordType::class, [
+                'label' => 'Mot de passe',
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
@@ -34,6 +39,7 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('submit', SubmitType::class, ['label' => 'Créer le compte'])
         ;
     }
 

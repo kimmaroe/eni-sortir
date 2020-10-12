@@ -29,6 +29,9 @@ class SecurityControllerTest extends WebTestCase
 
         $crawler = $client->submitForm('Créer le compte', [
             'registration_form[email]' => 'bla@bla.com',
+            'registration_form[lastName]' => 'bla',
+            'registration_form[firstName]' => 'pouf',
+            'registration_form[phone]' => '0606060606',
             'registration_form[plainPassword]' => 'blabla',
         ]);
 
@@ -47,16 +50,8 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSelectorTextContains('h1', 'Créer un compte');
 
         $crawler = $client->submitForm('Créer le compte', [
-            'registration_form[email]' => 'bla@bla.com',
-            'registration_form[plainPassword]' => 'blabla',
-        ]);
-
-        $crawler = $client->request('GET', '/register');
-
-        //same username again
-        $crawler = $client->submitForm('Créer le compte', [
-            'registration_form[email]' => 'bla@bla.com',
-            'registration_form[plainPassword]' => 'poufpouf',
+            'registration_form[email]' => 'yo@yo.com',
+            'registration_form[plainPassword]' => 'yoyoyo',
         ]);
 
         $this->assertResponseIsSuccessful('duplicate user insert should show the same page again');
@@ -67,22 +62,14 @@ class SecurityControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        //first create the account
-        $crawler = $client->request('GET', '/register');
-
-        $crawler = $client->submitForm('Créer le compte', [
-            'registration_form[email]' => 'bla@bla.com',
-            'registration_form[plainPassword]' => 'blabla',
-        ]);
-
         $crawler = $client->request('GET', '/login');
 
         $this->assertResponseIsSuccessful('login page should have a 200 code');
         $this->assertSelectorTextContains('h1', 'Connexion', 'h1 on login page should have Connexion text');
 
         $crawler = $client->submitForm('Connexion', [
-            'email' => 'bla@bla.com',
-            'password' => 'blabla',
+            'email' => 'yo@yo.com',
+            'password' => 'yoyoyo',
         ]);
 
         $this->assertResponseRedirects('/', 302,'user should be redirected after login');
@@ -95,23 +82,23 @@ class SecurityControllerTest extends WebTestCase
 
         //first register the user
         $crawler = $client->submitForm('Créer le compte', [
-            'registration_form[email]' => 'bla@bla.com',
-            'registration_form[plainPassword]' => 'blabla',
+            'registration_form[email]' => 'yo@yo.com',
+            'registration_form[plainPassword]' => 'yoyoyo',
         ]);
 
         $crawler = $client->request('GET', '/login');
 
         $crawler = $client->submitForm('Connexion', [
-            'email' => 'bla@bla.com222',
-            'password' => 'blabla',
+            'email' => 'yo@yo.com222',
+            'password' => 'yoyoyo',
         ]);
         $client->followRedirect();
         $this->assertResponseIsSuccessful('login page should be shown again on error');
         $this->assertSelectorTextContains('.alert', 'Email could not be found.', 'wrong email should be blocked');
 
         $crawler = $client->submitForm('Connexion', [
-            'email' => 'bla@bla.com',
-            'password' => 'blablafjadsklfjdsa',
+            'email' => 'yo@yo.com',
+            'password' => 'yoyoyofjadsklfjdsa',
         ]);
 
         $client->followRedirect();
@@ -119,8 +106,8 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSelectorTextContains('.alert', 'Invalid credentials.', 'wrong password should be blocked');
 
         $crawler = $client->submitForm('Connexion', [
-            'email' => 'bla@bla.com',
-            'password' => 'BLABLA',
+            'email' => 'yo@yo.com',
+            'password' => 'YOYOYO',
         ]);
         $client->followRedirect();
         $this->assertResponseIsSuccessful('login page should be shown again on error');
