@@ -24,7 +24,7 @@ class SecurityControllerTest extends WebTestCase
     public function testRegisterPage()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/register');
+        $crawler = $client->request('GET', '/inscription');
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Créer un compte');
@@ -46,7 +46,7 @@ class SecurityControllerTest extends WebTestCase
     public function testRegisterPageExistingUser()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/register');
+        $crawler = $client->request('GET', '/inscription');
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Créer un compte');
@@ -75,7 +75,7 @@ class SecurityControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/login');
+        $crawler = $client->request('GET', '/connexion');
 
         $this->assertResponseIsSuccessful('login page should have a 200 code');
         $this->assertSelectorTextContains('h1', 'Connexion', 'h1 on login page should have Connexion text');
@@ -88,7 +88,7 @@ class SecurityControllerTest extends WebTestCase
     public function testLoginPageWithWrongCredentials()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/register');
+        $crawler = $client->request('GET', '/inscription');
 
         //first register the user
         $crawler = $client->submitForm('Créer le compte', [
@@ -96,7 +96,7 @@ class SecurityControllerTest extends WebTestCase
             'registration_form[plainPassword]' => 'yoyoyo',
         ]);
 
-        $crawler = $client->request('GET', '/login');
+        $crawler = $client->request('GET', '/connexion');
 
         $crawler = $this->submitLoginForm('yo@bademail.com', 'yoyoyo', $client);
         $client->followRedirect();
@@ -117,7 +117,7 @@ class SecurityControllerTest extends WebTestCase
     public function testLogoutPage()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/logout');
+        $crawler = $client->request('GET', '/deconnexion');
 
         $this->assertResponseStatusCodeSame(302, 'logout page should redirect somewhere');
         $client->followRedirect();

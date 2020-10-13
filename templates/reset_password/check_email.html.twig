@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Message envoyé !{% endblock %}
+
+{% block main %}
+    <p>Un message vous a été envoyé ! Veuillez cliquer sur le lien qui s'y trouve. Il expirera dans {{ tokenLifetime|date('g') }} heure.</p>
+{% endblock %}
