@@ -114,7 +114,7 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSelectorTextContains('.alert', 'Invalid credentials.', 'password in caps should be blocked');
     }
 
-    public function testLogouPage()
+    public function testLogoutPage()
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/logout');
