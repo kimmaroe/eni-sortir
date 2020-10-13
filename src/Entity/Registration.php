@@ -29,6 +29,11 @@ class Registration
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $dateRegistered;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -54,6 +59,18 @@ class Registration
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getDateRegistered(): ?\DateTimeInterface
+    {
+        return $this->dateRegistered;
+    }
+
+    public function setDateRegistered(\DateTimeInterface $dateRegistered): self
+    {
+        $this->dateRegistered = $dateRegistered;
 
         return $this;
     }

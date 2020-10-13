@@ -29,9 +29,10 @@ class EventState
      */
     private $events;
 
-    public function __construct()
+    public function __construct(string $name)
     {
         $this->events = new ArrayCollection();
+        $this->name = $name;
     }
 
     public function getId(): ?int
