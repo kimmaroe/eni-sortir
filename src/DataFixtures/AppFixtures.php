@@ -57,13 +57,21 @@ class AppFixtures extends Fixture
             $event = new Event();
             $event->setTitle(substr($this->faker->sentence, 0, 30));
             $event->setDescription($this->faker->text(1000));
+
             $event->setDateCreated($this->faker->dateTimeBetween("-1 month"));
-            $event->setDateUpdated($this->faker->dateTimeBetween($event->getDateCreated()));
+
+            $event->setDateUpdated($this->faker->optional()->dateTimeBetween($event->getDateCreated()));
+
             $event->setDateStart($this->faker->dateTimeBetween($event->getDateCreated(), "+1 month"));
-            $event->setMaxRegistrations($this->faker->numberBetween(4, 100));
+
+            $dateRegistrationEnded = (clone $event->getDateStart())->sub(new \DateInterval('P'.mt_rand(1,4).'D'));
+            $event->setDateRegistrationEnded($dateRegistrationEnded);
+
             $endDate = clone $event->getDateStart();
             $endDate->add(new \DateInterval('P'.mt_rand(0,3).'DT'.mt_rand(1,6).'H'));
             $event->setDateEnd($endDate);
+
+            $event->setMaxRegistrations($this->faker->numberBetween(4, 100));
             $event->setCreator($this->faker->randomElement($allUsers));
 
             if ($event->getDateEnd() < $now){
@@ -72,8 +80,11 @@ class AppFixtures extends Fixture
             elseif ($event->getDateStart() < $now && $event->getDateEnd() > $now) {
                 $states = $this->manager->getRepository(EventState::class)->findStatesBetween(['Activité en cours']);
             }
+            elseif ($event->getDateStart() > $now && $event->getDateRegistrationEnded() < $now) {
+                $states = $this->manager->getRepository(EventState::class)->findStatesBetween(['Clôturée']);
+            }
             else {
-                $states = $this->manager->getRepository(EventState::class)->findStatesBetween(['Créée', 'Ouverte', 'Clôturée']);
+                $states = $this->manager->getRepository(EventState::class)->findStatesBetween(['Créée', 'Ouverte']);
             }
 
             $event->setState($this->faker->randomElement($states));

@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block main %}
+    <h1>{{ event.title }}</h1>
+    <div>{{ event.dateStart|date('d-m-Y à H:i') }}</div>
+{% endblock %}

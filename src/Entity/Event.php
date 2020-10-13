@@ -71,6 +71,11 @@ class Event
      */
     private $registrations;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $dateRegistrationEnded;
+
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
@@ -218,5 +223,28 @@ class Event
         }
 
         return $this;
+    }
+
+    public function getDateRegistrationEnded(): ?\DateTimeInterface
+    {
+        return $this->dateRegistrationEnded;
+    }
+
+    public function setDateRegistrationEnded(\DateTimeInterface $dateRegistrationEnded): self
+    {
+        $this->dateRegistrationEnded = $dateRegistrationEnded;
+
+        return $this;
+    }
+
+    public function isRegistered(User $user): bool
+    {
+        foreach($this->getRegistrations() as $registration){
+            if ($registration->getUser() === $user){
+                return true;
+            }
+        }
+
+        return false;
     }
 }

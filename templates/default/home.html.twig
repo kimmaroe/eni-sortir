@@ -5,4 +5,32 @@
 {% block main %}
     <h1 class="text-xl">Sortir.com</h1>
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At deserunt dignissimos explicabo hic, quibusdam quo rerum totam voluptatum. Accusantium aspernatur eaque eum non, provident repudiandae sequi sint sunt veniam! Cumque.</p>
+
+    <table class="table-auto">
+        <thead>
+            <tr>
+                <th class="px-4 py-2">Titre</th>
+                <th class="px-4 py-2">Date</th>
+                <th class="px-4 py-2">Clôture</th>
+                <th class="px-4 py-2">Inscrits / places</th>
+                <th class="px-4 py-2">État</th>
+                <th class="px-4 py-2">Inscrit</th>
+                <th class="px-4 py-2">Organisateur</th>
+                <th class="px-4 py-2">Actions</th>
+            </tr>
+        </thead>
+        {% for event in events %}
+            <tr class="">
+                <td class="border px-4 py-2"><a href="#{{ event.id }}">{{ event.title }}</a></td>
+                <td class="border px-4 py-2">{{ event.dateStart|date('d-m-Y à H:i') }}</td>
+                <td class="border px-4 py-2">{{ event.dateRegistrationEnded|date('d-m-Y à H:i') }}</td>
+                <td class="border px-4 py-2">{{ event.registrations|length }} / {{ event.maxRegistrations }}</td>
+                <td class="border px-4 py-2">{{ event.state.name }}</td>
+                <td class="border px-4 py-2">{{ event.isRegistered(app.user) ? 'X' : '' }}</td>
+                <td class="border px-4 py-2">{{ event.creator.email }}</td>
+                <td class="border px-4 py-2"><a href="{{ path('event_detail', {'id': event.id}) }}">Afficher</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+
 {% endblock %}
