@@ -66,9 +66,9 @@ class User implements UserInterface
      * @Assert\NotBlank(message="Veuillez renseigner votre nom de famille !")
      * @Assert\Length(
      *     min=2,
-     *     minMessage="Votre nom de famille devrait avoir au moins {{limit}} caractères !",
+     *     minMessage="Votre nom de famille devrait avoir au moins {{ limit }} caractères !",
      *     max=50,
-     *     maxMessage="Votre nom de famille devrait avoir maximum {{limit}} caractères !"
+     *     maxMessage="Votre nom de famille devrait avoir maximum {{ limit }} caractères !"
      * )
      * @ORM\Column(type="string", length=50)
      */
@@ -78,9 +78,9 @@ class User implements UserInterface
      * @Assert\NotBlank(message="Veuillez renseigner votre prénom !")
      * @Assert\Length(
      *     min=2,
-     *     minMessage="Votre prénom devrait avoir au moins {{limit}} caractères !",
+     *     minMessage="Votre prénom devrait avoir au moins {{ limit }} caractères !",
      *     max=50,
-     *     maxMessage="Votre prénom devrait avoir maximum {{limit}} caractères !"
+     *     maxMessage="Votre prénom devrait avoir maximum {{ limit }} caractères !"
      * )
      * @ORM\Column(type="string", length=50)
      */
@@ -90,9 +90,9 @@ class User implements UserInterface
      * @Assert\NotBlank(message="Veuillez renseigner votre téléphone !")
      * @Assert\Length(
      *     min=8,
-     *     minMessage="Votre téléphone devrait avoir au moins {{limit}} caractères !",
+     *     minMessage="Votre téléphone devrait avoir au moins {{ limit }} caractères !",
      *     max=20,
-     *     maxMessage="Votre téléphone devrait avoir maximum {{limit}} caractères !"
+     *     maxMessage="Votre téléphone devrait avoir maximum {{ limit }} caractères !"
      * )
      * @Assert\Regex(pattern="/^[0-9\s.+-]{8,20}$/", match=true, message="Votre téléphone devrait contenir entre 8 et 20 chiffres, espaces . - et +")
 

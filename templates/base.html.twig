@@ -4,23 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <title>{% block title %}Sortir.com{% endblock %}</title>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <a class="main-logo" href="{{ path('home') }}" title="Retour à l'accueil">Sortir.com</a>
-            <nav>
-                <a href="{{ path('home') }}" title="Retour à l'accueil">Accueil</a>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 flex flex-col min-h-screen">
+        <header class="flex items-baseline">
+            <a class="p-2 pl-0 mr-2 text-lg" href="{{ path('home') }}" title="Retour à l'accueil">Sortir.com</a>
+            <nav class="flex">
+                <a href="{{ path('home') }}" title="Retour à l'accueil" class="p-2">Accueil</a>
                 {% if app.user %}
-                    <a href="{{ path('app_logout') }}" title="Déconnexion">Déconnexion</a>
+                    <a href="{{ path('app_logout') }}" title="Déconnexion" class="p-2">Déconnexion</a>
                 {% else %}
-                    <a href="{{ path('app_login') }}" title="Connexion">Connexion</a>
-                    <a href="{{ path('app_register') }}" title="Créer un compte">Créer un compte</a>
+                    <a href="{{ path('app_login') }}" title="Connexion" class="p-2">Connexion</a>
+                    <a href="{{ path('app_register') }}" title="Créer un compte" class="p-2">Créer un compte</a>
                 {% endif %}
             </nav>
         </header>
-        <main>
+        <main class="flex-grow">
             {% block main %}{% endblock %}
         </main>
         <footer>
