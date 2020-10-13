@@ -3,7 +3,9 @@
 namespace App\Controller\Tests;
 
 use App\Entity\User;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Crawler;
 
 class SecurityControllerTest extends WebTestCase
 {
@@ -52,10 +54,21 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $client->submitForm('Créer le compte', [
             'registration_form[email]' => 'yo@yo.com',
             'registration_form[plainPassword]' => 'yoyoyo',
+            'registration_form[lastName]' => 'blasdfdsfadsf',
+            'registration_form[firstName]' => 'posdfdsfdsfdsfuf',
+            'registration_form[phone]' => '0606090906',
         ]);
 
         $this->assertResponseIsSuccessful('duplicate user insert should show the same page again');
-        $this->assertSelectorTextContains('form ul li', 'Cet email est déjà associé à un compte !');
+        $this->assertSelectorTextContains('.text-red-500', 'Cet email est déjà associé à un compte !');
+    }
+
+    private function submitLoginForm(string $email, string $password, KernelBrowser $client): Crawler
+    {
+        return $client->submitForm('Connexion', [
+            'login_form[email]' => $email,
+            'login_form[password]' => $password,
+        ]);
     }
 
     public function testLoginPage()
@@ -67,10 +80,7 @@ class SecurityControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful('login page should have a 200 code');
         $this->assertSelectorTextContains('h1', 'Connexion', 'h1 on login page should have Connexion text');
 
-        $crawler = $client->submitForm('Connexion', [
-            'email' => 'yo@yo.com',
-            'password' => 'yoyoyo',
-        ]);
+        $crawler = $this->submitLoginForm('yo@yo.com', 'yoyoyo', $client);
 
         $this->assertResponseRedirects('/', 302,'user should be redirected after login');
     }
@@ -88,30 +98,20 @@ class SecurityControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/login');
 
-        $crawler = $client->submitForm('Connexion', [
-            'email' => 'yo@yo.com222',
-            'password' => 'yoyoyo',
-        ]);
+        $crawler = $this->submitLoginForm('yo@bademail.com', 'yoyoyo', $client);
         $client->followRedirect();
         $this->assertResponseIsSuccessful('login page should be shown again on error');
-        $this->assertSelectorTextContains('.alert', 'Email could not be found.', 'wrong email should be blocked');
+        $this->assertSelectorTextContains('.text-red-500', 'Mauvais identifiants !', 'wrong email should be blocked');
 
-        $crawler = $client->submitForm('Connexion', [
-            'email' => 'yo@yo.com',
-            'password' => 'yoyoyofjadsklfjdsa',
-        ]);
-
+        $crawler = $this->submitLoginForm('yo@yo.com', 'wrongpassword', $client);
         $client->followRedirect();
         $this->assertResponseIsSuccessful('login page should be shown again on error');
-        $this->assertSelectorTextContains('.alert', 'Invalid credentials.', 'wrong password should be blocked');
+        $this->assertSelectorTextContains('.text-red-500', 'Mauvais identifiants !', 'wrong password should be blocked');
 
-        $crawler = $client->submitForm('Connexion', [
-            'email' => 'yo@yo.com',
-            'password' => 'YOYOYO',
-        ]);
+        $crawler = $this->submitLoginForm('yo@yo.com', 'YOYOYO', $client);
         $client->followRedirect();
         $this->assertResponseIsSuccessful('login page should be shown again on error');
-        $this->assertSelectorTextContains('.alert', 'Invalid credentials.', 'password in caps should be blocked');
+        $this->assertSelectorTextContains('.text-red-500', 'Mauvais identifiants !', 'password in caps should be blocked');
     }
 
     public function testLogoutPage()
