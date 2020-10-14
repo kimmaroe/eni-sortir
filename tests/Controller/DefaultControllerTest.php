@@ -20,5 +20,6 @@ class DefaultControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful('homepage should work duh');
         $this->assertSelectorTextContains('h1', 'Sortir.com', 'there should be a h1 with Sortir.com text inside');
+        $this->assertEquals(21, $crawler->filter('tr')->count(), 'we should have 20 events + 1 tr for the table header');
     }
 }
