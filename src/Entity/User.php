@@ -132,6 +132,12 @@ class User implements UserInterface
      */
     private $registrations;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $campus;
+
     public function __construct()
     {
         $this->organizedEvents = new ArrayCollection();
@@ -354,6 +360,18 @@ class User implements UserInterface
                 $registration->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): self
+    {
+        $this->campus = $campus;
 
         return $this;
     }

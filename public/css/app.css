@@ -13,3 +13,7 @@
 .all-inline label {
     margin-right: 5px;
 }
+
+.dates-special input {
+    max-width: 88%;
+}

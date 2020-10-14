@@ -27,8 +27,9 @@ class AppFixtures extends Fixture
     {
         $this->manager = $manager;
         $this->loadStates();
-        $this->loadUsers();
         $this->loadCampus();
+
+        $this->loadUsers();
         $this->loadEvents();
         $this->loadRegistrations();
     }
@@ -66,7 +67,7 @@ class AppFixtures extends Fixture
     private function loadEvents()
     {
         $allUsers = $this->manager->getRepository(User::class)->findAll();
-        $allCampuses = $this->manager->getRepository(Campus::class)->findAll();
+
         $now = new \DateTime();
         for($i = 0; $i < 100; $i++){
             $event = new Event();
@@ -104,7 +105,7 @@ class AppFixtures extends Fixture
 
             $event->setState($this->faker->randomElement($states));
 
-            $event->setCampus($this->faker->randomElement($allCampuses));
+            $event->setCampus($event->getCreator()->getCampus());
 
             $this->manager->persist($event);
         }
@@ -123,6 +124,8 @@ class AppFixtures extends Fixture
 
     private function loadUsers()
     {
+        $allCampuses = $this->manager->getRepository(Campus::class)->findAll();
+
         $user = new User();
         $user->setEmail('yo@yo.com');
         //yoyoyo
@@ -133,6 +136,7 @@ class AppFixtures extends Fixture
         $user->setLastName('yo');
         $user->setPhone('0606060606');
         $user->setDateCreated(new \DateTime());
+        $user->setCampus($allCampuses[0]);
 
         $this->manager->persist($user);
 
@@ -146,6 +150,7 @@ class AppFixtures extends Fixture
         $user->setLastName('admin');
         $user->setPhone('0606060607');
         $user->setDateCreated(new \DateTime("-1 month"));
+        $user->setCampus($allCampuses[0]);
 
         $this->manager->persist($user);
 
@@ -159,6 +164,7 @@ class AppFixtures extends Fixture
             $user->setLastName($this->faker->lastName);
             $user->setPhone($this->faker->unique()->phoneNumber);
             $user->setDateCreated($this->faker->dateTimeBetween('-1 year'));
+            $user->setCampus($this->faker->randomElement($allCampuses));
             $this->manager->persist($user);
         }
 

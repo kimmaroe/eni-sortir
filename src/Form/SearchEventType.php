@@ -17,17 +17,32 @@ class SearchEventType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->setMethod('GET');
         $builder
-            ->add('keyword', SearchType::class, ['label' => 'Mots-clés'])
-            ->add('dateStart', DateType::class, ['format' => DateType::HTML5_FORMAT, 'label' => 'Du'])
-            ->add('dateEnd', DateType::class, ['format' => DateType::HTML5_FORMAT, 'label' => 'au'])
-            ->add('includeCreatedEvent', CheckboxType::class, ['label' => 'Sorties dont je suis le créateur'])
-            ->add('includeRegistered', CheckboxType::class, ['label' => 'Sorties auxquelles je suis inscrit'])
-            ->add('includeNotRegistered', CheckboxType::class, ['label' => 'Sorties auxquelles je ne suis pas inscrit'])
-            ->add('includePastEvent', CheckboxType::class, ['label' => "Sorties passées"])
+            ->add('keyword', SearchType::class, ['label' => 'Mots-clés', 'required' => false])
+            ->add('dateStart', DateType::class, [
+                'widget' => 'single_text',
+                'html5' => true,
+                'label' => 'Du',
+                'attr' => ['class' => 'w-2/3'],
+                'required' => false
+            ])
+            ->add('dateEnd', DateType::class, [
+                'widget' => 'single_text',
+                'html5' => true,
+                'label' => 'au',
+                'attr' => ['class' => 'w-2/3'],
+                'required' => false
+
+            ])
+            ->add('includeCreatedEvent', CheckboxType::class, ['label' => 'Sorties dont je suis le créateur', 'required' => false])
+            ->add('includeRegistered', CheckboxType::class, ['label' => 'Sorties auxquelles je suis inscrit', 'required' => false])
+            ->add('includeNotRegistered', CheckboxType::class, ['label' => 'Sorties auxquelles je ne suis pas inscrit', 'required' => false])
+            ->add('includePastEvent', CheckboxType::class, ['label' => "Sorties passées", 'required' => false])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
-                'choice_label' => 'name'
+                'choice_label' => 'name',
+                'required' => false
             ])
             ->add('submit', SubmitType::class, ['label' => 'Rechercher'])
         ;

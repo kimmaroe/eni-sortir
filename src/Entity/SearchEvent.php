@@ -5,6 +5,9 @@ namespace App\Entity;
 use App\Repository\SearchEventRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+//ICI IL N'Y A PAS l'annotation @Entity, donc aucune table n'est créée pour cette classe
+//la classe ne sert qu'au formulaire de recherche
+
 
 class SearchEvent
 {
@@ -38,22 +41,22 @@ class SearchEvent
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $includeCreatedEvent;
+    private $includeCreatedEvent = true;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $includeRegistered;
+    private $includeRegistered = true;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $includeNotRegistered;
+    private $includeNotRegistered = true;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $includePastEvent;
+    private $includePastEvent = false;
 
     public function getId(): ?int
     {
