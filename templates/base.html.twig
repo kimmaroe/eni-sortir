@@ -7,26 +7,42 @@
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <title>{% block title %}Sortir.com{% endblock %}</title>
+    <link rel="icon" href="{{ asset('img/logo.png') }}">
 </head>
 <body class="min-h-screen">
     <div class="container mx-auto px-4 flex flex-col min-h-screen">
-        <header class="flex items-baseline">
-            <a class="p-2 pl-0 mr-2 text-lg" href="{{ path('home') }}" title="Retour à l'accueil">Sortir.com</a>
-            <nav class="flex">
+        <header class="flex items-baseline justify-between mb-4">
+            <nav class="flex items-baseline">
+                <a class="p-2 pl-0 mr-2 text-2xl" href="{{ path('home') }}" title="Retour à l'accueil"><img class="logo inline-block w-6" src="{{ asset('img/logo.png') }}" alt="Logo sortir.com">Sortir.com</a>
                 <a href="{{ path('home') }}" title="Retour à l'accueil" class="p-2">Accueil</a>
+            </nav>
+
+            <nav class="flex items-baseline">
                 {% if app.user %}
                     <a href="{{ path('app_logout') }}" title="Déconnexion" class="p-2">Déconnexion</a>
+                    <a href="#" title="Mon profil" class="p-2 pr-0">Mon profil ({{ app.user.firstName ~ " " ~ app.user.lastName }})</a>
                 {% else %}
                     <a href="{{ path('app_login') }}" title="Connexion" class="p-2">Connexion</a>
-                    <a href="{{ path('app_register') }}" title="Créer un compte" class="p-2">Créer un compte</a>
+                    <a href="{{ path('app_register') }}" title="Créer un compte" class="p-2 pr-0">Créer un compte</a>
                 {% endif %}
             </nav>
         </header>
+
+        {# read and display all flash messages #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash flash-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
         <main class="flex-grow">
             {% block main %}{% endblock %}
         </main>
-        <footer>
-            &copy; Sortir.com {{ "now"|date("Y") }}
+        <footer class="mt-6 mb-6 text-center">
+            <div>&copy; Sortir.com {{ "now"|date("Y") }}</div>
+            <div>Icons made by <a href="http://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a></div>
         </footer>
     </div>
 </body>

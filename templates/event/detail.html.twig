@@ -4,5 +4,11 @@
 
 {% block main %}
     <h1>{{ event.title }}</h1>
-    <div>{{ event.dateStart|date('d-m-Y à H:i') }}</div>
+    <div>{{ event.description }}</div>
+    <div>Clôture des inscriptions : {{ event.dateRegistrationEnded|date('d-m-Y à H:i') }}</div>
+    <div>Date de la sortie : {{ event.dateStart|date('d-m-Y à H:i') }}</div>
+    <div>Fin de la sortie : {{ event.dateEnd|date('d-m-Y à H:i') }}</div>
+    <div>
+        {% include 'inc/event_actions_link.html.twig' %}
+    </div>
 {% endblock %}
