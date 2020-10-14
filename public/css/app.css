@@ -3,3 +3,13 @@
     top: -2px;
     margin-right: 2px;
 }
+
+.all-inline label,
+.all-inline div,
+.all-inline input {
+    display: inline-block;
+}
+
+.all-inline label {
+    margin-right: 5px;
+}

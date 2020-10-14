@@ -3,8 +3,39 @@
 {% block title %}{{ parent() }} | Accueil{% endblock %}
 
 {% block main %}
-    <h1 class="text-xl">Sortir.com</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At deserunt dignissimos explicabo hic, quibusdam quo rerum totam voluptatum. Accusantium aspernatur eaque eum non, provident repudiandae sequi sint sunt veniam! Cumque.</p>
+    <div>
+        {{ form_start(searchForm) }}
+        <div class="flex">
+            <div class="mr-6">
+                {{ form_row(searchForm.campus) }}
+                {{ form_row(searchForm.keyword) }}
+                <div class="all-inline">
+                    {{ form_row(searchForm.dateStart) }}
+                    {{ form_row(searchForm.dateEnd) }}
+                </div>
+            </div>
+            <div>
+                <div class="all-inline checkbox">
+                    {{ form_widget(searchForm.includeCreatedEvent) }}
+                    {{ form_label(searchForm.includeCreatedEvent) }}
+                </div>
+                <div class="all-inline checkbox">
+                    {{ form_widget(searchForm.includeRegistered) }}
+                    {{ form_label(searchForm.includeRegistered) }}
+                </div>
+                <div class="all-inline checkbox">
+                    {{ form_widget(searchForm.includeNotRegistered) }}
+                    {{ form_label(searchForm.includeNotRegistered) }}
+                </div>
+                <div class="all-inline checkbox">
+                    {{ form_widget(searchForm.includePastEvent) }}
+                    {{ form_label(searchForm.includePastEvent) }}
+                </div>
+                {{ form_row(searchForm.submit) }}
+            </div>
+        </div>
+        {{ form_end(searchForm) }}
+    </div>
 
     <table class="table-auto">
         <thead>
