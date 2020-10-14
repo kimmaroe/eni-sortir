@@ -40,5 +40,6 @@ security:
     access_control:
         - { path: ^/connexion$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/inscription$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/nouveau-mot-de-passe, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: ROLE_STUDENT }
         # - { path: ^/profile, roles: ROLE_USER }

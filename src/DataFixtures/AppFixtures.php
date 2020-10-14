@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Campus;
 use App\Entity\Event;
 use App\Entity\EventState;
 use App\Entity\Registration;
@@ -27,8 +28,21 @@ class AppFixtures extends Fixture
         $this->manager = $manager;
         $this->loadStates();
         $this->loadUsers();
+        $this->loadCampus();
         $this->loadEvents();
         $this->loadRegistrations();
+    }
+
+    private function loadCampus()
+    {
+        $names = ["Nantes", "Rennes", "Niort"];
+        foreach($names as $name){
+            $campus = new Campus();
+            $campus->setName($name);
+            $this->manager->persist($campus);
+        }
+
+        $this->manager->flush();
     }
 
     private function loadRegistrations()
@@ -52,6 +66,7 @@ class AppFixtures extends Fixture
     private function loadEvents()
     {
         $allUsers = $this->manager->getRepository(User::class)->findAll();
+        $allCampuses = $this->manager->getRepository(Campus::class)->findAll();
         $now = new \DateTime();
         for($i = 0; $i < 100; $i++){
             $event = new Event();
@@ -88,6 +103,8 @@ class AppFixtures extends Fixture
             }
 
             $event->setState($this->faker->randomElement($states));
+
+            $event->setCampus($this->faker->randomElement($allCampuses));
 
             $this->manager->persist($event);
         }

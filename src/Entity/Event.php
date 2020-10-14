@@ -76,6 +76,12 @@ class Event
      */
     private $dateRegistrationEnded;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="events")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $campus;
+
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
@@ -246,5 +252,17 @@ class Event
         }
 
         return false;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): self
+    {
+        $this->campus = $campus;
+
+        return $this;
     }
 }
