@@ -17,8 +17,6 @@ class DefaultController extends AbstractController
      */
     public function home(EventRepository $eventRepository, Request $request)
     {
-        $yo = new Yo();
-
         $searchEvent = new SearchEvent();
         $searchEvent->setCampus($this->getUser()->getCampus());
         $searchForm = $this->createForm(SearchEventType::class, $searchEvent);
