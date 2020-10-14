@@ -22,4 +22,11 @@ class DefaultControllerTest extends WebTestCase
         $this->assertSelectorTextContains('h1', 'Sortir.com', 'there should be a h1 with Sortir.com text inside');
         $this->assertEquals(21, $crawler->filter('tr')->count(), 'we should have 20 events + 1 tr for the table header');
     }
+
+    public function testHomepageIsLocked()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/');
+        $this->assertResponseRedirects('/connexion', 302, 'homepage should redirect non logged in user to connection page');
+    }
 }
