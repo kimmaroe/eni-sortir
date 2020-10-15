@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Campus;
+use App\Entity\City;
 use App\Entity\Event;
 use App\Entity\EventState;
 use App\Entity\Registration;
@@ -26,12 +27,38 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $this->manager = $manager;
+        $this->loadCities();
         $this->loadStates();
         $this->loadCampus();
 
         $this->loadUsers();
         $this->loadEvents();
         $this->loadRegistrations();
+    }
+
+    private function loadCities()
+    {
+        ini_set('memory_limit', -1);
+
+        // Getting the CSV from filesystem
+        $fileName = './communes2020.csv';
+        $handle = fopen($fileName, 'r');
+        $rowIndex = 0;
+        while($row = fgetcsv($handle)){
+            $rowIndex++;
+            if ($rowIndex === 1){
+                continue;
+            }
+
+            $city = new City();
+            $city->setName($row[8]);
+            $city->setDept($row[3]);
+            $city->setRegion($row[2]);
+
+            $this->manager->persist($city);
+        }
+
+        $this->manager->flush();
     }
 
     private function loadCampus()
