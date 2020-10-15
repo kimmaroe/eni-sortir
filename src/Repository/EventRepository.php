@@ -48,13 +48,15 @@ class EventRepository extends ServiceEntityRepository
         //inclure les événements auxquels je ne suis PAS inscrit
         //l'air de rien, c'est la méga galère ce truc (en tout cas pour moi)
         if ($searchData->getIncludeNotRegistered()){
-            //crée un nouveau querybuilder dans une autre table
-            $subqb = $this->getEntityManager()->createQueryBuilder()->from(Registration::class, 'r');
-            $subqb->select('r');
-            $subqb->andWhere('r.user != :me')->setParameter('me', $currentUser);
-            $subResults = $subqb->getQuery()->getResult();
-            dump($subResults);
-            //$qb->andWhere('r.user = :me')->setParameter('me', $currentUser);
+            //crée un nouveau querybuilder pour faire une sous-requête
+            //me retourne tous les IDs des événements auxquels je suis inscrit
+            $subqb = $this->createQueryBuilder('ev');
+            $subqb->select('ev.id');
+            $subqb->leftJoin('ev.registrations', 'reg');
+            $subqb->andWhere('reg.user = :me')->setParameter('me', $currentUser);
+
+            //on injecte la sous-requête dans la requête avec un notIn()
+            $qb->andWhere($qb->expr()->notIn('e.id', $subqb->getDQL()))->setParameter('me', $currentUser);
         }
 
         //mots clés
@@ -73,17 +75,28 @@ class EventRepository extends ServiceEntityRepository
             $qb->andWhere($orStatements);
         }
 
-        //date de début
-        $startAt = $searchData->getDateStart() ? $searchData->getDateStart() : new \DateTime();
-        $qb->andWhere('e.dateStart >= :now')->setParameter('now', $startAt);
+        //si une date de début est précisée, on va dire que c'est plus fort que la checkbox "inclure les év. passés"
+        if ($searchData->getDateStart()){
+            $qb->andWhere('e.dateStart >= :ds')->setParameter('ds', $searchData->getDateStart());
+        }
+        //la case n'est pas cochée, alors on limite aux events futurs
+        elseif(!$searchData->getIncludePastEvent()){
+            $qb->andWhere('e.dateStart >= :ds')->setParameter('ds', new \DateTime());
+        }
 
         //date de fin
         if ($searchData->getDateEnd()){
-            $qb->andWhere('e.dateStart >= :now')->setParameter('now', $searchData->getDateEnd());
+            //on ajoute les heures pour que ce soit vraiment plus OU ÉGAL
+            $dateMax = $searchData->getDateEnd()->setTime(23,59,59);
+            $qb->andWhere('e.dateStart <= :de')->setParameter('de', $dateMax);
         }
 
+        //@todo : paginer les résultats
+
         $qb->setMaxResults(20);
+        $qb->addOrderBy('e.dateRegistrationEnded', 'ASC');
         $query = $qb->getQuery();
+        //dd($query);
         $results = $query->getResult();
         return $results;
     }

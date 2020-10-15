@@ -40,6 +40,7 @@ class SearchEventType extends AbstractType
             ->add('includeNotRegistered', CheckboxType::class, ['label' => 'Sorties auxquelles je ne suis pas inscrit', 'required' => false])
             ->add('includePastEvent', CheckboxType::class, ['label' => "Sorties passées", 'required' => false])
             ->add('campus', EntityType::class, [
+                'placeholder' => 'Choisir un campus...',
                 'class' => Campus::class,
                 'choice_label' => 'name',
                 'required' => false
