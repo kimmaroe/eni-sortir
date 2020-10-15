@@ -1,0 +1,3 @@
+{% for location in city.locations %}
+    <option value="{{ location.id }}">{{ location.name }} ({{ city.name }})</option>
+{% endfor %}

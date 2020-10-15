@@ -52,6 +52,7 @@ class AppFixtures extends Fixture
                 $location->setStreetNumber($this->faker->numberBetween(1, 9999));
                 $location->setLat($this->faker->latitude);
                 $location->setLng($this->faker->longitude);
+                $location->setZip($this->faker->randomNumber(5));
 
                 $this->manager->persist($location);
             }

@@ -54,8 +54,6 @@ class EventRepository extends ServiceEntityRepository
             $subqb->select('ev.id');
             $subqb->leftJoin('ev.registrations', 'reg');
             $subqb->andWhere('reg.user = :me')->setParameter('me', $currentUser);
-
-            //on injecte la sous-requête dans la requête avec un notIn()
             $qb->andWhere($qb->expr()->notIn('e.id', $subqb->getDQL()))->setParameter('me', $currentUser);
         }
 

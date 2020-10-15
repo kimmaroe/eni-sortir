@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Créer une nouvelle sortie
+{% endblock %}
+
+{% block main %}
+    <h1>Créer une nouvelle sortie</h1>
+
+        {{ form_start(eventForm, {attr: {class: 'flex'}}) }}
+        <div class="mr-6">
+            {{ form_row(eventForm.title) }}
+            {{ form_row(eventForm.dateStart) }}
+            {{ form_row(eventForm.dateEnd) }}
+            {{ form_row(eventForm.dateRegistrationEnded) }}
+            {{ form_row(eventForm.maxRegistrations) }}
+            {{ form_row(eventForm.description) }}
+        </div>
+        <div>
+            <label class="block text-gray-700 text-sm font-bold mb-2 required">Campus organisateur</label>
+            <div class="mb-4">{{ app.user.campus.name }}</div>
+
+            {{ form_row(eventForm.city) }}
+
+            <div class="flex items-baseline">
+                {{ form_row(eventForm.location) }}
+                <button id="open-location-modal-button" type="button" class="ml-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline">+</button>
+            </div>
+            <label class="block text-gray-700 text-sm font-bold mb-2 required"># et rue</label>
+            <div class="mb-4" id="street_address"></div>
+
+            <label class="block text-gray-700 text-sm font-bold mb-2 required">Code postal</label>
+            <div class="mb-4" id="zip"></div>
+
+            <label class="block text-gray-700 text-sm font-bold mb-2 required">Latitude</label>
+            <div class="mb-4" id="lat"></div>
+
+            <label class="block text-gray-700 text-sm font-bold mb-2 required">Longitude</label>
+            <div class="mb-4" id="lng"></div>
+
+            {{ form_row(eventForm.submit) }}
+
+        </div>
+        {{ form_end(eventForm) }}
+
+        <div id="location-form-container" class="modal hidden">
+            <div>
+                <h2>Créer un nouveau lieu !</h2>
+                {{ form(locationForm) }}
+                <button id="close-modal-button" class="">Annuler</button>
+            </div>
+        </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('js/create_event_form.js') }}"></script>
+{% endblock %}

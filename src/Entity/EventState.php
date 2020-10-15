@@ -12,6 +12,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EventState
 {
+    //pour pouvoir faire référence aux label sans accents...
+    const CREATED = 'Créée';
+    const OPEN = 'Ouverte';
+    const CLOSED = 'Clôturée';
+    const IN_PROGRESS = 'Activité en cours';
+    const COMPLETED = 'Passée';
+    const CANCELED = 'Annulée';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

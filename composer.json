@@ -11,6 +11,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.7",
         "fzaninotto/faker": "^1.9",
+        "jms/serializer-bundle": "^3.7",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/apache-pack": "^1.0",
@@ -37,8 +38,7 @@
         "symfony/yaml": "4.4.*",
         "symfonycasts/reset-password-bundle": "^1.1",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0",
-        "ext-spltype": "*"
+        "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
         "dama/doctrine-test-bundle": "^6.3",

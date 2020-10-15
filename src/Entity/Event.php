@@ -82,6 +82,16 @@ class Event
      */
     private $campus;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Location::class)
+     */
+    private $location;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=City::class)
+     */
+    private $city;
+
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
@@ -262,6 +272,30 @@ class Event
     public function setCampus(?Campus $campus): self
     {
         $this->campus = $campus;
+
+        return $this;
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location): self
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): self
+    {
+        $this->city = $city;
 
         return $this;
     }

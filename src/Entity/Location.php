@@ -53,6 +53,11 @@ class Location
      */
     private $dateCreated;
 
+    /**
+     * @ORM\Column(type="string", length=5, nullable=true)
+     */
+    private $zip;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -138,6 +143,18 @@ class Location
     public function setDateCreated(\DateTimeInterface $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
+
+        return $this;
+    }
+
+    public function getZip(): ?string
+    {
+        return $this->zip;
+    }
+
+    public function setZip(?string $zip): self
+    {
+        $this->zip = $zip;
 
         return $this;
     }
