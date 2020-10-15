@@ -11,20 +11,6 @@
     <script>
         const ROOL_URL = "{{ url('home') }}";
     </script>
-
-    <script>
-        function supprimerVille(id){
-            xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    console.log(xhr.response);
-                    //document.getElementById(xhr.responseText).remove();
-                }
-            }
-            xhr.open("GET", "http://localhost/sortir/public/", true);
-            xhr.send();
-        }
-    </script>
 </head>
 <body class="min-h-screen">
     <div class="container mx-auto px-4 flex flex-col min-h-screen">
