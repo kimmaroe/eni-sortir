@@ -6,6 +6,7 @@ use App\Entity\Campus;
 use App\Entity\City;
 use App\Entity\Event;
 use App\Entity\EventState;
+use App\Entity\Location;
 use App\Entity\Registration;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -27,13 +28,36 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $this->manager = $manager;
+
         $this->loadCities();
+        $this->loadLocations();
         $this->loadStates();
         $this->loadCampus();
-
         $this->loadUsers();
         $this->loadEvents();
         $this->loadRegistrations();
+    }
+
+    private function loadLocations()
+    {
+        $bigCities = ['Nantes', 'Rennes', 'Niort'];
+        foreach($bigCities as $cityName){
+            $city = $this->manager->getRepository(City::class)->findOneBy(['name' => $cityName]);
+            for($i=0; $i < 10; $i++) {
+                $location = new Location();
+                $location->setName($this->faker->words(mt_rand(1, 5), true));
+                $location->setCity($city);
+                $location->setDateCreated($this->faker->dateTimeBetween("- 2 months"));
+                $location->setStreetName($this->faker->streetName);
+                $location->setStreetNumber($this->faker->numberBetween(1, 9999));
+                $location->setLat($this->faker->latitude);
+                $location->setLng($this->faker->longitude);
+
+                $this->manager->persist($location);
+            }
+        }
+
+        $this->manager->flush();
     }
 
     private function loadCities()
@@ -41,7 +65,7 @@ class AppFixtures extends Fixture
         ini_set('memory_limit', -1);
 
         // Getting the CSV from filesystem
-        $fileName = './communes2020.csv';
+        $fileName = __DIR__ . '/communes2020.csv';
         $handle = fopen($fileName, 'r');
         $rowIndex = 0;
         while($row = fgetcsv($handle)){
