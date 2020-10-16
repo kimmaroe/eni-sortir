@@ -35,28 +35,6 @@ class EventRepository extends ServiceEntityRepository
             $qb->andWhere('e.campus = :campus')->setParameter('campus', $searchData->getCampus());
         }
 
-        //inclure les événements que j'ai créés
-        if ($searchData->getIncludeCreatedEvent()){
-            $qb->andWhere('e.creator = :me')->setParameter('me', $currentUser);
-        }
-
-        //inclure les événements auxquels je suis inscrit
-        if ($searchData->getIncludeRegistered()){
-            $qb->andWhere('r.user = :me')->setParameter('me', $currentUser);
-        }
-
-        //inclure les événements auxquels je ne suis PAS inscrit
-        //l'air de rien, c'est la méga galère ce truc (en tout cas pour moi)
-        if ($searchData->getIncludeNotRegistered()){
-            //crée un nouveau querybuilder pour faire une sous-requête
-            //me retourne tous les IDs des événements auxquels je suis inscrit
-            $subqb = $this->createQueryBuilder('ev');
-            $subqb->select('ev.id');
-            $subqb->leftJoin('ev.registrations', 'reg');
-            $subqb->andWhere('reg.user = :me')->setParameter('me', $currentUser);
-            $qb->andWhere($qb->expr()->notIn('e.id', $subqb->getDQL()))->setParameter('me', $currentUser);
-        }
-
         //mots clés
         if ($searchData->getKeyword()){
             //on sépare tous les mots de la phrase tapée
@@ -77,10 +55,6 @@ class EventRepository extends ServiceEntityRepository
         if ($searchData->getDateStart()){
             $qb->andWhere('e.dateStart >= :ds')->setParameter('ds', $searchData->getDateStart());
         }
-        //la case n'est pas cochée, alors on limite aux events futurs
-        elseif(!$searchData->getIncludePastEvent()){
-            $qb->andWhere('e.dateStart >= :ds')->setParameter('ds', new \DateTime());
-        }
 
         //date de fin
         if ($searchData->getDateEnd()){
@@ -89,6 +63,35 @@ class EventRepository extends ServiceEntityRepository
             $qb->andWhere('e.dateStart <= :de')->setParameter('de', $dateMax);
         }
 
+
+        //les checkbox maintenant...
+        //je les considère comme des OR à ajouter à la requête des champs de gauche
+        //c'est pas logique dans tous les cas ce form
+
+        $orExpression = $qb->expr()->orX();
+
+        //inclure les événements auxquels je suis inscrit
+        if ($searchData->getIncludeRegistered()){
+            $orExpression->add(
+                $qb->expr()->andX('r.user = :me')
+            );
+        }
+
+        //inclure les événements auxquels je ne suis PAS inscrit
+        //l'air de rien, c'est la méga galère ce truc (en tout cas pour moi)
+        if ($searchData->getIncludeNotRegistered()){
+            //crée un nouveau querybuilder pour faire une sous-requête
+            //me retourne tous les IDs des événements auxquels je suis inscrit
+            $subqb = $this->createQueryBuilder('ev')->select('ev.id');
+            $subqb->leftJoin('ev.registrations', 'reg');
+            $subqb->andWhere('reg.user = :me')->setParameter('me', $currentUser);
+            $orExpression->add(
+                $qb->expr()->andX($qb->expr()->notIn('e.id', $subqb->getDQL()))
+            );
+        }
+
+        $qb->andWhere($orExpression);
+        $qb->setParameter('me', $currentUser);
         //@todo : paginer les résultats
 
         $qb->setMaxResults(20);

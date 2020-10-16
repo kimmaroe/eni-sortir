@@ -44,10 +44,31 @@ Créer une nouvelle sortie
         {{ form_end(eventForm) }}
 
         <div id="location-form-container" class="modal hidden">
-            <div>
-                <h2>Créer un nouveau lieu !</h2>
-                {{ form(locationForm) }}
-                <button id="close-modal-button" class="">Annuler</button>
+            <div class="p-6 bg-white border-solid border border-gray-500 rounded-md shadow-lg">
+                <h2 class="text-xl text-bold">Créer un nouveau lieu !</h2>
+                {{ form_start(locationForm, {attr: {
+                    action: url('api_v1_location_create'),
+                    id: 'create-location-form',
+                    class: 'flex items-flex-start',
+                    novalidate: 'novalidate'
+                    }})
+                }}
+                    <div class="w-50">
+                        {{ form_row(locationForm.city) }}
+                        {{ form_row(locationForm.zip) }}
+                        {{ form_row(locationForm.streetNumber) }}
+                        {{ form_row(locationForm.streetName) }}
+                    </div>
+                    <div class="ml-6 w-50">
+                        {{ form_row(locationForm.lat) }}
+                        {{ form_row(locationForm.lng) }}
+                        {{ form_row(locationForm.name) }}
+
+                        {{ form_row(locationForm.submit) }}
+                        <button id="close-modal-button" class="" type="button">Annuler</button>
+                    </div>
+                {{ form_end(locationForm) }}
+                <ul id="create-location-errors" class="text-red-500 italic"></ul>
             </div>
         </div>
 {% endblock %}

@@ -9,17 +9,14 @@
             <div class="mr-6">
                 {{ form_row(searchForm.campus) }}
                 {{ form_row(searchForm.keyword) }}
-                <div class="block text-gray-700 text-sm font-bold mb-2 required">Dates</div>
+                <div class="block text-gray-700 text-sm font-bold mb-2 required">Dates de début de la sortie...</div>
                 <div class="all-inline dates-special">
                     {{ form_row(searchForm.dateStart) }}
                     {{ form_row(searchForm.dateEnd) }}
                 </div>
             </div>
             <div>
-                <div class="all-inline checkbox">
-                    {{ form_widget(searchForm.includeCreatedEvent) }}
-                    {{ form_label(searchForm.includeCreatedEvent) }}
-                </div>
+                <div class="block text-gray-700 text-sm font-bold mb-2 required">Inclure les sorties auxquelles...</div>
                 <div class="all-inline checkbox">
                     {{ form_widget(searchForm.includeRegistered) }}
                     {{ form_label(searchForm.includeRegistered) }}
@@ -27,10 +24,6 @@
                 <div class="all-inline checkbox">
                     {{ form_widget(searchForm.includeNotRegistered) }}
                     {{ form_label(searchForm.includeNotRegistered) }}
-                </div>
-                <div class="all-inline checkbox">
-                    {{ form_widget(searchForm.includePastEvent) }}
-                    {{ form_label(searchForm.includePastEvent) }}
                 </div>
                 {{ form_row(searchForm.submit) }}
             </div>

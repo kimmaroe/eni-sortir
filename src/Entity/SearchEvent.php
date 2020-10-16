@@ -41,22 +41,12 @@ class SearchEvent
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $includeCreatedEvent = true;
-
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
     private $includeRegistered = true;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $includeNotRegistered = true;
-
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $includePastEvent = false;
 
     public function getId(): ?int
     {
@@ -111,18 +101,6 @@ class SearchEvent
         return $this;
     }
 
-    public function getIncludeCreatedEvent(): ?bool
-    {
-        return $this->includeCreatedEvent;
-    }
-
-    public function setIncludeCreatedEvent(?bool $includeCreatedEvent): self
-    {
-        $this->includeCreatedEvent = $includeCreatedEvent;
-
-        return $this;
-    }
-
     public function getIncludeRegistered(): ?bool
     {
         return $this->includeRegistered;
@@ -147,15 +125,4 @@ class SearchEvent
         return $this;
     }
 
-    public function getIncludePastEvent(): ?bool
-    {
-        return $this->includePastEvent;
-    }
-
-    public function setIncludePastEvent(?bool $includePastEvent): self
-    {
-        $this->includePastEvent = $includePastEvent;
-
-        return $this;
-    }
 }

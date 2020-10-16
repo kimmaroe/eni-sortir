@@ -17,11 +17,6 @@ class LocationType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('streetNumber')
-            ->add('streetName')
-            ->add('lat')
-            ->add('lng')
-            ->add('zip')
             ->add('city', EntityType::class, [
                 'label' => 'Ville de la sortie',
                 'class' => 'App\Entity\City',
@@ -31,6 +26,11 @@ class LocationType extends AbstractType
                     return $cityRepository->createQueryBuilder('c')->andWhere('c.region = 52')->orderBy('c.name', 'ASC');
                 }
             ])
+            ->add('zip')
+            ->add('streetNumber')
+            ->add('streetName')
+            ->add('lat')
+            ->add('lng')
             ->add('submit', SubmitType::class, ['label' => 'Créer le lieu !'])
         ;
     }

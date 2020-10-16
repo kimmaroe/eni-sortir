@@ -35,10 +35,8 @@ class SearchEventType extends AbstractType
                 'required' => false
 
             ])
-            ->add('includeCreatedEvent', CheckboxType::class, ['label' => 'Sorties dont je suis le créateur', 'required' => false])
-            ->add('includeRegistered', CheckboxType::class, ['label' => 'Sorties auxquelles je suis inscrit', 'required' => false])
-            ->add('includeNotRegistered', CheckboxType::class, ['label' => 'Sorties auxquelles je ne suis pas inscrit', 'required' => false])
-            ->add('includePastEvent', CheckboxType::class, ['label' => "Sorties passées", 'required' => false])
+            ->add('includeRegistered', CheckboxType::class, ['label' => 'je suis inscrit', 'required' => false])
+            ->add('includeNotRegistered', CheckboxType::class, ['label' => 'je ne suis pas inscrit', 'required' => false])
             ->add('campus', EntityType::class, [
                 'placeholder' => 'Choisir un campus...',
                 'class' => Campus::class,
@@ -47,6 +45,11 @@ class SearchEventType extends AbstractType
             ])
             ->add('submit', SubmitType::class, ['label' => 'Rechercher'])
         ;
+    }
+
+    public function getName()
+    {
+        return null;
     }
 
     public function configureOptions(OptionsResolver $resolver)

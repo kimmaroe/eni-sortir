@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\LocationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=LocationRepository::class)
@@ -18,16 +19,19 @@ class Location
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Veuillez renseigner un nom pour ce lieu")
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
+     * @Assert\NotBlank(message="Veuillez indiquer le numéro de rue")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     private $streetNumber;
 
     /**
+     * @Assert\NotBlank(message="Veuillez indiquer la rue")
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $streetName;
@@ -43,6 +47,7 @@ class Location
     private $lng;
 
     /**
+     * @Assert\NotBlank(message="Veuillez choisir la ville pour ce lieu")
      * @ORM\ManyToOne(targetEntity=City::class, inversedBy="locations")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -54,6 +59,7 @@ class Location
     private $dateCreated;
 
     /**
+     * @Assert\NotBlank(message="Veuillez indiquer le code postal")
      * @ORM\Column(type="string", length=5, nullable=true)
      */
     private $zip;
