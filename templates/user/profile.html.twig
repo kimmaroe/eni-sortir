@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil{% endblock %}
+
+{% block main %}
+    <h2 class="text-xl mb-4">Mon profil</h2>
+    <div class="flex">
+        {% if app.user.picture %}
+        <div class="mr-6 profile-picture">
+            <img src="{{ asset('uploads/'~app.user.picture) }}" alt="Photo de profil">
+        </div>
+        {% endif %}
+        <div>
+            <div>{{ app.user.firstName }} {{ app.user.lastName }} </div>
+            <div>{{ app.user.username }}</div>
+            <div>{{ app.user.email }}</div>
+            <nav class="my-2">
+                <a href="{{ path('user_profile_edit') }}" class="inline-block mb-2 bg-blue-500 hover:bg-blue-700 text-sm text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Modifier mes infos</a>
+                <a href="#" class="block mb-2 bg-blue-500 hover:bg-blue-700 text-sm text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Modifier mon mot de passe</a>
+            </nav>
+        </div>
+    </div>
+
+    <section class="mt-6">
+        <h2 class="text-xl">Les sorties que j'ai organisées</h2>
+        {% for event in app.user.organizedEvents %}
+            <article class="mb-3">
+                <h3><a href="{{ path('event_detail', {id: event.id}) }}">{{ event.title }}</a></h3>
+                <div>Débute le {{ event.dateStart|date('d-m-Y à H:i') }}</div>
+            </article>
+        {% endfor %}
+    </section>
+
+    <section class="mt-6">
+        <h2 class="text-xl">Les sorties auxquelles je suis inscrit</h2>
+        {% for registration in app.user.registrations %}
+            <article class="mb-3">
+                <h3><a href="{{ path('event_detail', {id: registration.event.id}) }}">{{ registration.event.title }}</a></h3>
+                <div>Débute le {{ registration.event.dateStart|date('d-m-Y à H:i') }}</div>
+            </article>
+        {% endfor %}
+    </section>
+{% endblock %}

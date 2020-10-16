@@ -26,7 +26,7 @@
             <nav class="flex items-baseline">
                 {% if app.user %}
                     <a href="{{ path('app_logout') }}" title="Déconnexion" class="p-2">Déconnexion</a>
-                    <a href="#" title="Mon profil" class="p-2 pr-0">Mon profil ({{ app.user.firstName ~ " " ~ app.user.lastName }})</a>
+                    <a href="{{ path('user_profile') }}" title="Mon profil" class="p-2 pr-0">Mon profil ({{ app.user.firstName ~ " " ~ app.user.lastName }})</a>
                 {% else %}
                     <a href="{{ path('app_login') }}" title="Connexion" class="p-2">Connexion</a>
                     <a href="{{ path('app_register') }}" title="Créer un compte" class="p-2 pr-0">Créer un compte</a>

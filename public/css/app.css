@@ -33,3 +33,25 @@
 .modal.hidden {
     display: none;
 }
+
+.flash {
+    padding: 20px;
+    margin: 20px 0;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2rem;
+    color: white;
+    border-radius: 3px;
+}
+
+.flash-success {
+    background-color: #1e7e34;
+}
+
+.flash-error {
+    background-color: #bd2130;
+}
+
+.profile-picture {
+    max-width: 200px;
+}
