@@ -5,3 +5,6 @@
         <a href="{{ path('registration_create', {'id': event.id}) }}">Inscription</a>
     {% endif %}
 {% endif %}
+{% if is_granted('cancel', event) %}
+    <a href="{{ path('event_cancel', {'id': event.id}) }}">Annuler l'événement</a>
+{% endif %}

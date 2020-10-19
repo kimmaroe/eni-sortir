@@ -380,4 +380,15 @@ class User implements UserInterface
     {
         return $this->getFirstName() . " " . $this->getLastName();
     }
+
+    public function isAdmin()
+    {
+        foreach($this->getRoles() as $role){
+            if ($role === "ROLE_ADMIN"){
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -22,6 +22,10 @@ a.logo:hover {
     text-decoration: none;
 }
 
+.actions a {
+    display: block;
+}
+
 .all-inline label,
 .all-inline div,
 .all-inline input {
