@@ -28,6 +28,7 @@ security:
                 secret:   '%kernel.secret%'
                 lifetime: 6048000 # 1 week in seconds
                 path:     /
+                remember_me_parameter: 'login_form[remember_me]' #le nom du champ de checkbox dans mon form
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
