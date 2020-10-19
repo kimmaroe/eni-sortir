@@ -19,6 +19,7 @@ class EventState
     const IN_PROGRESS = 'Activité en cours';
     const COMPLETED = 'Passée';
     const CANCELED = 'Annulée';
+    const ARCHIVED = 'Archivée';
 
     /**
      * @ORM\Id

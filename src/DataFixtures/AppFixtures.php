@@ -166,7 +166,7 @@ class AppFixtures extends Fixture
 
     private function loadStates()
     {
-        $stateNames = ["Créée", "Ouverte", "Clôturée", "Activité en cours", "Passée", "Annulée"];
+        $stateNames = ["Créée", "Ouverte", "Clôturée", "Activité en cours", "Passée", "Annulée", "Archivée"];
         foreach($stateNames as $name) {
             $state = new EventState($name);
             $this->manager->persist($state);
