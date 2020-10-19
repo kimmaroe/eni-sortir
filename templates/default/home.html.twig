@@ -52,7 +52,7 @@
                 <td class="border px-4 py-2">{{ event.registrations|length }} / {{ event.maxRegistrations }}</td>
                 <td class="border px-4 py-2">{{ event.state.name }}</td>
                 <td class="border px-4 py-2">{{ event.isRegistered(app.user) ? 'X' : '' }}</td>
-                <td class="border px-4 py-2">{{ event.creator.email }}</td>
+                <td class="border px-4 py-2">d{{ event.creator.fullName }}</a></td>
                 <td class="border px-4 py-2">
                     <a href="{{ path('event_detail', {'id': event.id}) }}">Afficher</a>
                     {% include 'inc/event_actions_link.html.twig' %}

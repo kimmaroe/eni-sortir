@@ -209,6 +209,7 @@ class AppFixtures extends Fixture
         for($i = 0; $i < 30; $i++){
             $user = new User();
             $user->setEmail($this->faker->unique()->email());
+            //utilise l'email comme mot de passe !
             $user->setPassword( $this->passwordEncoder->encodePassword($user, $user->getEmail()) );
             $user->setRoles(['ROLE_STUDENT']);
             $user->setIsActive(true);
