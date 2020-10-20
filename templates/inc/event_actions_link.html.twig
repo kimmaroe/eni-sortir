@@ -1,7 +1,7 @@
 {% if event.state.name == "Ouverte" %}
     {% if event.isRegistered(app.user) %}
         <a href="{{ path('registration_remove', {'id': event.id}) }}">Désinscription</a>
-    {% else %}
+    {% elseif is_granted('register', event) %}
         <a href="{{ path('registration_create', {'id': event.id}) }}">Inscription</a>
     {% endif %}
 {% endif %}

@@ -30,6 +30,9 @@ class RegistrationController extends AbstractController
             $this->createNotFoundException("Oups ! Cette sortie n'existe plus !");
         }
 
+        //voir le EventVoter (tchèque si places dispos et sortie ouverte)
+        $this->denyAccessUnlessGranted('register', $event);
+
         //on tchèque si l'inscription existe déjà
         $foundRegistration = $registrationRepository->findOneBy(['user' => $this->getUser(), 'event' => $event]);
         if ($foundRegistration){

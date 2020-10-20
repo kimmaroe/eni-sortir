@@ -14,7 +14,7 @@ class EventVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['cancel', 'view'])
+        return in_array($attribute, ['cancel', 'view', 'register'])
             && $subject instanceof \App\Entity\Event;
     }
 
@@ -34,6 +34,20 @@ class EventVoter extends Voter
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
+
+            //dans le cas où l'utilisateur tente de s'iscrire à une sortie...
+            case 'register':
+                //la sortie doit être ouverte pour s'inscrire
+                if ($event->getState()->getName() !== EventState::OPEN){
+                    return false;
+                }
+                //il doit y avoir des places dispos
+                if ($event->getRegistrations()->count() >= $event->getMaxRegistrations()){
+                    return false;
+                }
+                return true;
+                break;
+
             //dans le cas où l'utilisateur tente d'annuler une sortie...
             case 'cancel':
                 //seulement si c'est le créateur ou un admin
@@ -45,6 +59,7 @@ class EventVoter extends Voter
                 }
                 return false;
                 break;
+
             //dans le cas où l'utilisateur tente de voir le détail d'une sortie
             case 'view':
                 if ($user->isAdmin() || $user === $event->getCreator()){
