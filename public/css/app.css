@@ -1,3 +1,13 @@
+body {
+    background-image: url('https://source.unsplash.com/weekly?fun'); /* image random à chaque jour, avec mot-clef "fun" */
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+body > .container {
+    background-color: rgba(255,255,255,0.8);
+}
+
 h1 {
     font-size: 1.4rem;
     font-weight: bold;
