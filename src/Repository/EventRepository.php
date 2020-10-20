@@ -30,7 +30,8 @@ class EventRepository extends ServiceEntityRepository
             ->leftJoin('e.registrations', 'r')->addSelect('r')
             ->join('e.creator', 'c')->addSelect('c')
             ->join('e.campus', 'camp')->addSelect('camp')
-            ->join('e.state', 's')->addSelect('s');
+            ->join('e.state', 's')->addSelect('s')
+            ->leftJoin('e.cancelation', 'cancel')->addSelect('cancel');
 
         //campus
         if ($searchData->getCampus()){
