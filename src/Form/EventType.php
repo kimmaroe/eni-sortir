@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EventType extends AbstractType
@@ -51,8 +53,8 @@ class EventType extends AbstractType
             ])
             ->add('location', ChoiceType::class, [
                 'label' => 'Adresse',
-                'mapped' => false,
                 'choices' => [],
+                'mapped' => false,
                 'placeholder' => "Choisissez d'abord une ville !"
             ])
             ->add('submit', SubmitType::class, ['label' => 'Créer ma sortie !'])

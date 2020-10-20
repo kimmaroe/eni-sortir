@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Entity\EventCancelation;
 use App\Entity\EventState;
+use App\Form\EventCancelationType;
 use App\Form\EventType;
 use App\Form\LocationType;
 use App\Repository\EventStateRepository;
+use App\Repository\LocationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,26 +23,47 @@ class EventController extends AbstractController
     /**
      * @Route("/annuler/{id}", name="cancel")
      */
-    public function cancel(Event $event, EventStateRepository $eventStateRepository, EntityManagerInterface $entityManager)
+    public function cancel(
+        Event $event,
+        EventStateRepository $eventStateRepository,
+        EntityManagerInterface $entityManager,
+        Request $request
+    )
     {
         //vérifie que c'est bien l'organisateur ou un admin !
         //voir le Security\Voter\EventVoter
         $this->denyAccessUnlessGranted('cancel', $event);
 
-        //récupère le bon état depuis la bdd
-        $canceledState =  $eventStateRepository->findOneBy(['name' => EventState::CANCELED]);
+        $eventCancelation = new EventCancelation();
+        $form = $this->createForm(EventCancelationType::class, $eventCancelation);
 
-        //on l'hydrate dans notre sortie
-        $event->setState($canceledState);
-        $event->setDateUpdated(new \DateTime());
+        $form->handleRequest($request);
 
-        //on sauvegarde
-        $entityManager->persist($event);
-        $entityManager->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
 
-        //petit message à afficher et redirection à tous les coups
-        $this->addFlash('success', 'La sortie a été annulée !');
-        return $this->redirectToRoute('event_detail', ['id' => $event->getId()]);
+            $eventCancelation->setEvent($event);
+            $eventCancelation->setDateCanceled(new \DateTime());
+
+            //récupère le bon état depuis la bdd
+            $canceledState =  $eventStateRepository->findOneBy(['name' => EventState::CANCELED]);
+
+            //on l'hydrate dans notre sortie
+            $event->setState($canceledState);
+            $event->setDateUpdated(new \DateTime());
+
+            //on sauvegarde
+            $entityManager->persist($event);
+            $entityManager->persist($eventCancelation);
+            $entityManager->flush();
+
+            //petit message à afficher et redirection à tous les coups
+            $this->addFlash('success', 'La sortie a été annulée !');
+            return $this->redirectToRoute('event_detail', ['id' => $event->getId()]);
+        }
+
+        return $this->render('event/cancel.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     /**
@@ -58,7 +82,7 @@ class EventController extends AbstractController
     /**
      * @Route("/creer", name="create")
      */
-    public function create(Request $request, EventStateRepository $eventStateRepository)
+    public function create(Request $request, EventStateRepository $eventStateRepository, LocationRepository $locationRepository)
     {
         $event = new Event();
         $event->setDateCreated(new \DateTime());
@@ -67,6 +91,12 @@ class EventController extends AbstractController
         $event->setState($state);
         $eventForm = $this->createForm(EventType::class, $event);
         $eventForm->handleRequest($request);
+
+        if ($eventForm->isSubmitted()){
+            $locationId = $request->request->get('event')['location'];
+            $location = $locationRepository->find($locationId);
+            $event->setLocation($location);
+        }
 
         if ($eventForm->isSubmitted() && $eventForm->isValid()){
             $em = $this->getDoctrine()->getManager();

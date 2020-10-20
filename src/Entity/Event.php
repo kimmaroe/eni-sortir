@@ -92,6 +92,11 @@ class Event
      */
     private $city;
 
+    /**
+     * @ORM\OneToOne(targetEntity=EventCancelation::class, mappedBy="event", cascade={"persist", "remove"})
+     */
+    private $cancelation;
+
     public function __construct()
     {
         $this->registrations = new ArrayCollection();
@@ -296,6 +301,23 @@ class Event
     public function setCity(?City $city): self
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    public function getCancelation(): ?EventCancelation
+    {
+        return $this->cancelation;
+    }
+
+    public function setCancelation(EventCancelation $cancelation): self
+    {
+        $this->cancelation = $cancelation;
+
+        // set the owning side of the relation if necessary
+        if ($cancelation->getEvent() !== $this) {
+            $cancelation->setEvent($this);
+        }
 
         return $this;
     }

@@ -4,6 +4,7 @@
 
 {% block main %}
     <h1>{{ event.title }}</h1>
+    <div>État de la sortie : {{ event.state.name }}</div>
     <div>{{ event.description }}</div>
     <div>Organisée par : <a href="{{ path('user_profile', {id: event.creator.id}) }}" title="Voir le profil de {{ event.creator.fullName }}">{{ event.creator.fullName }}</a></div>
     <div>Clôture des inscriptions : {{ event.dateRegistrationEnded|date('d-m-Y à H:i') }}</div>

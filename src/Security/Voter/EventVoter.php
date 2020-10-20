@@ -47,7 +47,7 @@ class EventVoter extends Voter
                 break;
             //dans le cas où l'utilisateur tente de voir le détail d'une sortie
             case 'view':
-                if ($user->isAdmin()){
+                if ($user->isAdmin() || $user === $event->getCreator()){
                     return true;
                 }
                 //on ne peut voir une sortie que si elle n'est ni en état "créée" ou archivée
