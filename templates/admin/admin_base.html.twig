@@ -17,13 +17,13 @@
     <div class="container mx-auto px-4 flex flex-col min-h-screen">
         <header class="flex items-baseline justify-between mb-4">
             <nav class="flex items-baseline">
-                <a class="logo p-2 pl-0 mr-2 text-2xl" href="{{ path('admin_default_dashboard') }}" title="Retour à l'accueil"><img class="inline-block w-6" src="{{ asset('img/logo.png') }}" alt="Logo sortir.com">BackOfficinou | Sortir.com</a>
+                <a class="logo p-2 pl-0 mr-2 text-2xl" href="{{ path('admin_default_dashboard') }}" title="Retour à l'accueil du BO"><img class="inline-block w-6" src="{{ asset('img/logo.png') }}" alt="Logo sortir.com">BackOfficinou</a>
 
-                <a href="{{ path('admin_user_list') }}" class="mr-3">Utilisateurs</a>
-                <a href="#" class="mr-3">Sorties</a>
-                <a href="#" class="mr-3">Lieux</a>
-                <a href="#" class="mr-3">Villes</a>
-                <a href="#" class="mr-3">Campus</a>
+                <a href="{{ path('admin_user_list') }}" class="mr-6">Utilisateurs</a>
+                <a href="#" class="mr-6">Sorties</a>
+                <a href="#" class="mr-6">Lieux</a>
+                <a href="#" class="mr-6">Villes</a>
+                <a href="#" class="mr-6">Campus</a>
             </nav>
 
             <nav class="flex items-baseline">
@@ -39,7 +39,7 @@
         {% for label, messages in app.flashes %}
             {% for message in messages %}
                 <div class="flash flash-{{ label }}">
-                    {{ message }}
+                    {{ message|raw }}
                 </div>
             {% endfor %}
         {% endfor %}

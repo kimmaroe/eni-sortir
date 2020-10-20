@@ -6,7 +6,10 @@
 
 {% block main %}
     <h2>Utilisateurs</h2>
-    <a href="{{ path('admin_user_add') }}">Créer un compte</a>
+    <nav class="vertical-nav">
+        <a href="{{ path('admin_user_add') }}">Créer un compte</a>
+        <a href="{{ path('admin_user_import') }}">Importer un fichier d'étudiants</a>
+    </nav>
     <table class="table-auto">
         <tr>
             <th>ID</th>
