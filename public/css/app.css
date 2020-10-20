@@ -98,3 +98,11 @@ a.logo:hover {
 .profile-picture {
     max-width: 200px;
 }
+
+#registration_form_role label,
+#registration_form_role input {
+    display: inline-block;
+}
+#registration_form_role label {
+    margin-right: 15px;
+}

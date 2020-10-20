@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    <title>{% block title %}Sortir.com{% endblock %}</title>
+    <link rel="icon" href="{{ asset('img/logo.png') }}">
+    <script>
+        const ROOT_URL = "{{ url('home') }}";
+    </script>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 flex flex-col min-h-screen">
+        <header class="flex items-baseline justify-between mb-4">
+            <nav class="flex items-baseline">
+                <a class="logo p-2 pl-0 mr-2 text-2xl" href="{{ path('admin_default_dashboard') }}" title="Retour à l'accueil"><img class="inline-block w-6" src="{{ asset('img/logo.png') }}" alt="Logo sortir.com">BackOfficinou | Sortir.com</a>
+            </nav>
+
+            <nav class="flex items-baseline">
+                {% if app.user %}
+                    <a href="{{ path('app_logout') }}" title="Déconnexion" class="p-2">Déconnexion</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" title="Connexion" class="p-2">Connexion</a>
+                {% endif %}
+            </nav>
+        </header>
+
+        {# read and display all flash messages #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash flash-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <main class="flex-grow">
+            {% block main %}{% endblock %}
+        </main>
+        <footer class="mt-6 mb-6 text-center">
+            <div>&copy; Sortir.com {{ "now"|date("Y") }}</div>
+            <div>Icons made by <a href="http://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a></div>
+        </footer>
+    </div>
+
+    {% block js %}{% endblock %}
+</body>
+</html>

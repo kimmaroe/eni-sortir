@@ -2,9 +2,12 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
 use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -37,6 +40,19 @@ class RegistrationFormType extends AbstractType
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
+                ],
+            ])
+            ->add('campus', EntityType::class, [
+                'class' => Campus::class,
+                'choice_label' => 'name',
+            ])
+            ->add('role', ChoiceType::class, [
+                'multiple' => false,
+                'mapped' => false,
+                'expanded' => true,
+                'choices' => [
+                    'admin' => 'ROLE_ADMIN',
+                    'étudiant' => 'ROLE_STUDENT'
                 ],
             ])
             ->add('submit', SubmitType::class, ['label' => 'Créer le compte'])
