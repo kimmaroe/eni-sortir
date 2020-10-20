@@ -3,11 +3,13 @@
 namespace App\Repository;
 
 use App\Entity\Event;
+use App\Entity\EventState;
 use App\Entity\Registration;
 use App\Entity\SearchEvent;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Event|null find($id, $lockMode = null, $lockVersion = null)
@@ -102,32 +104,15 @@ class EventRepository extends ServiceEntityRepository
         return $results;
     }
 
-    // /**
-    //  * @return Event[] Returns an array of Event objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findOldEventsToArchive()
     {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $qb = $this->createQueryBuilder('e');
+        $qb
+            ->join('e.state', 's')
+            ->andWhere($qb->expr()->in('s.name', [EventState::COMPLETED, EventState::CANCELED]))
+            ->andWhere('e.dateEnd <= :onemonthago')
+            ->setParameter('onemonthago', new \DateTime("-1 month"));
+        $result = $qb->getQuery()->getResult();
+        return $result;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Event
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
