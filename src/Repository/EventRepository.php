@@ -115,4 +115,52 @@ class EventRepository extends ServiceEntityRepository
         $result = $qb->getQuery()->getResult();
         return $result;
     }
+
+    public function findEventsToClose()
+    {
+        //ici je le fais en DQL, je ne m'en sort pas avec le querybuilder :D
+
+        //sélectionne les événements ouverts ayant une date de clôture passée OU ayant atteint le nombre max d'inscrits
+        $dql = "SELECT e FROM App\Entity\Event e 
+                JOIN e.state s 
+                JOIN e.registrations r
+                WHERE s.name = :openstate 
+                GROUP BY e.id 
+                HAVING (
+                    COUNT(r) >= e.maxRegistrations 
+                    OR 
+                    e.dateRegistrationEnded <= :now
+                )";
+
+        $query = $this->getEntityManager()->createQuery($dql);
+        $query ->setParameter('openstate', EventState::OPEN);
+        $query ->setParameter('now', new \DateTime());
+
+        $result = $query->getResult();
+        return $result;
+    }
+
+
+    public function findEventsToReopen()
+    {
+        //sélectionne les événements fermées ayant, suite à une désincription par exemple, un nombre de places disponible
+        //et dont la date de clôture est toujours dans le futur
+        $dql = "SELECT e FROM App\Entity\Event e 
+                JOIN e.state s 
+                JOIN e.registrations r
+                WHERE s.name = :closedstate 
+                GROUP BY e.id 
+                HAVING (
+                    COUNT(r) < e.maxRegistrations 
+                    AND 
+                    e.dateRegistrationEnded > :now
+                )";
+
+        $query = $this->getEntityManager()->createQuery($dql);
+        $query ->setParameter('closedstate', EventState::CLOSED);
+        $query ->setParameter('now', new \DateTime());
+
+        $result = $query->getResult();
+        return $result;
+    }
 }

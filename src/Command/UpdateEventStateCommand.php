@@ -15,7 +15,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Cette commande est destinée à être appelée par un cron job (tâche planifiée) à chaque minute, en permanence
  * Elle place les éventuelles sorties en état "archivée" lorsqu'elles sont terminées ou annulées depuis un mois
- * 
+ * Elle place également les sorties en "clôturée" lorsque la date de clôture des inscriptions est dépassée
+ *
  */
 
 class UpdateEventStateCommand extends Command
@@ -25,6 +26,11 @@ class UpdateEventStateCommand extends Command
      * @var EntityManagerInterface
      */
     private $entityManager;
+
+    /**
+     * @var SymfonyStyle
+     */
+    private $io;
 
     /**
      * UpdateEventStateCommand constructor.
@@ -45,8 +51,66 @@ class UpdateEventStateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
+        $this->io = new SymfonyStyle($input, $output);
 
+        //archive les vieilles sorties
+        $this->archiveEvents();
+        //ferme les événements ayant atteint leur nombre de places max ou si la date de clôture est dépassée
+        $this->closeEvents();
+        //si on augmente le nombre de place ou si ya des désinscriptions
+        $this->reopenEvents();
+
+        $this->io->success('Finito.');
+        return 0;
+    }
+
+
+    protected function reopenEvents()
+    {
+        $eventRepository = $this->entityManager->getRepository(Event::class);
+
+        //les événements dont l'inscription doit être fermée maintenant
+        $eventsToReopen = $eventRepository->findEventsToReopen();
+
+        //récupère l'état "closed"
+        $openState = $this->entityManager->getRepository(EventState::class)->findOneBy(['name' => EventState::OPEN]);
+
+        //change l'état de tous ces événements
+        foreach($eventsToReopen as $event){
+            $event->setState($openState);
+            $event->setDateUpdated(new \DateTime());
+            $this->entityManager->persist($event);
+        }
+
+        $this->entityManager->flush();
+
+        $this->io->writeln(count($eventsToReopen) . " sortie(s) ont été réouverte(s).");
+    }
+
+    protected function closeEvents()
+    {
+        $eventRepository = $this->entityManager->getRepository(Event::class);
+
+        //les événements dont l'inscription doit être fermée maintenant
+        $eventsToClose = $eventRepository->findEventsToClose();
+
+        //récupère l'état "closed"
+        $closedState = $this->entityManager->getRepository(EventState::class)->findOneBy(['name' => EventState::CLOSED]);
+
+        //change l'état de tous ces événements
+        foreach($eventsToClose as $event){
+            $event->setState($closedState);
+            $event->setDateUpdated(new \DateTime());
+            $this->entityManager->persist($event);
+        }
+
+        $this->entityManager->flush();
+
+        $this->io->writeln(count($eventsToClose) . " sortie(s) fermée(s).");
+    }
+
+    protected function archiveEvents()
+    {
         $eventRepository = $this->entityManager->getRepository(Event::class);
 
         //trouve les sorties actuellement terminée ou annulée depuis un mois pour les archiver
@@ -64,7 +128,6 @@ class UpdateEventStateCommand extends Command
 
         $this->entityManager->flush();
 
-        $io->success('Finito. ' . count($eventsToArchive) . " sortie(s) archivée(s).");
-        return 0;
+        $this->io->writeln(count($eventsToArchive) . " sortie(s) archivée(s).");
     }
 }
