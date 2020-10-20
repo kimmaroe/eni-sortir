@@ -5,12 +5,12 @@
 {% block main %}
     <div>
         {{ form_start(searchForm) }}
-        <div class="flex">
+        <div class="block md:flex">
             <div class="mr-6">
                 {{ form_row(searchForm.campus) }}
                 {{ form_row(searchForm.keyword) }}
             </div>
-            <div class="mr-6">
+            <div class="mr-6 hidden md:block">
                 <div class="">
                     {{ form_row(searchForm.dateStart) }}
                     {{ form_row(searchForm.dateEnd) }}
@@ -39,11 +39,11 @@
             <tr>
                 <th class="px-4 py-2">Titre</th>
                 <th class="px-4 py-2">Date</th>
-                <th class="px-4 py-2">Clôture</th>
-                <th class="px-4 py-2">Inscrits / places</th>
+                <th class="px-4 py-2 hidden md:table-cell">Clôture</th>
+                <th class="px-4 py-2 hidden lg:table-cell">Inscrits / places</th>
                 <th class="px-4 py-2">État</th>
-                <th class="px-4 py-2">Inscrit</th>
-                <th class="px-4 py-2">Organisateur</th>
+                <th class="px-4 py-2 hidden md:table-cell">Inscrit</th>
+                <th class="px-4 py-2 hidden lg:table-cell">Organisateur</th>
                 <th class="px-4 py-2">Actions</th>
             </tr>
         </thead>
@@ -58,11 +58,11 @@
                     {% endif %}
                 </td>
                 <td class="border px-4 py-2">{{ event.dateStart|date('d-m-Y à H:i') }}</td>
-                <td class="border px-4 py-2">{{ event.dateRegistrationEnded|date('d-m-Y à H:i') }}</td>
-                <td class="border px-4 py-2">{{ event.registrations|length }} / {{ event.maxRegistrations }}</td>
+                <td class="border px-4 py-2 hidden md:table-cell">{{ event.dateRegistrationEnded|date('d-m-Y à H:i') }}</td>
+                <td class="border px-4 py-2 hidden lg:table-cell">{{ event.registrations|length }} / {{ event.maxRegistrations }}</td>
                 <td class="border px-4 py-2">{{ event.state.name }}</td>
-                <td class="border px-4 py-2">{{ event.isRegistered(app.user) ? 'X' : '' }}</td>
-                <td class="border px-4 py-2">{{ event.creator.fullName }}</a></td>
+                <td class="border px-4 py-2 hidden md:table-cell">{{ event.isRegistered(app.user) ? 'X' : '' }}</td>
+                <td class="border px-4 py-2 hidden lg:table-cell">{{ event.creator.fullName }}</a></td>
                 <td class="border px-4 py-2 actions">
                     {% if is_granted('view', event) %}
                         <a href="{{ path('event_detail', {'id': event.id}) }}">Afficher</a>
