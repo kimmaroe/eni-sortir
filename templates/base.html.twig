@@ -29,7 +29,6 @@
                     <a href="{{ path('user_profile', {id: app.user.id}) }}" title="Mon profil" class="p-2 pr-0">Mon profil ({{ app.user.fullName }})</a>
                 {% else %}
                     <a href="{{ path('app_login') }}" title="Connexion" class="p-2">Connexion</a>
-                    <a href="{{ path('app_register') }}" title="Créer un compte" class="p-2 pr-0">Créer un compte</a>
                 {% endif %}
             </nav>
         </header>

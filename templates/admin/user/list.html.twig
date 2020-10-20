@@ -1,0 +1,31 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block main %}
+    <h2>Utilisateurs</h2>
+    <a href="{{ path('admin_user_add') }}">Créer un compte</a>
+    <table class="table-auto">
+        <tr>
+            <th>ID</th>
+            <th>Nom de famille</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Campus</th>
+            <th>Actions</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td class="border px-4 py-2">{{ user.id }}</td>
+            <td class="border px-4 py-2">{{ user.lastName }}</td>
+            <td class="border px-4 py-2">{{ user.firstName }}</td>
+            <td class="border px-4 py-2">{{ user.email }}</td>
+            <td class="border px-4 py-2">{{ user.campus.name }}</td>
+            <td class="border px-4 py-2"></td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+

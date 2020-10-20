@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\UserRepository;
 use App\Security\AppAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,17 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
  */
 class AdminUserController extends AbstractController
 {
+    /**
+     * @Route("/", name="list")
+     */
+    public function list(UserRepository $userRepository)
+    {
+        $allUsers = $userRepository->findBy([], ['lastName' => 'ASC']);
+        return $this->render('admin/user/list.html.twig', [
+            'users' => $allUsers
+        ]);
+    }
+
     /**
      * Équivalent de la page d'inscription, mais pour quelqu'un d'autre quoi
      * @Route("/ajouter", name="add")
