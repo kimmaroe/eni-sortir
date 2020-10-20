@@ -23,7 +23,7 @@ class SearchEventType extends AbstractType
             ->add('dateStart', DateType::class, [
                 'widget' => 'single_text',
                 'html5' => true,
-                'label' => 'Du',
+                'label' => 'Sortie débutant du',
                 'attr' => ['class' => 'w-2/3'],
                 'required' => false
             ])

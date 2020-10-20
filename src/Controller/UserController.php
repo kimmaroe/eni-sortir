@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/profil/{id}", name="user_profile")
+     * @Route("/profil/{id}", name="user_profile", requirements={"id": "\d+"})
      */
     public function profile(User $user)
     {
@@ -37,19 +37,24 @@ class UserController extends AbstractController
             /** @var UploadedFile $brochureFile */
             $pictureFile = $profileForm->get('pictureFile')->getData();
 
-            // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
             if ($pictureFile) {
+                //crée un nom de fichier unique et récupère l'extension du fichier
                 $newFilename = uniqid().'.'.$pictureFile->guessExtension();
 
-                // Move the file to the directory where brochures are stored
+                //déplace l'image dans le répertoire configuré dans services.yaml
                 $pictureFile->move(
-                    $this->getParameter('upload_directory'),
+                    $this->getParameter('upload_directory') . '/original',
                     $newFilename
                 );
 
-                // updates the 'brochureFilename' property to store the PDF file name
-                // instead of its contents
+                //crée une autre version de l'image, plus petite
+                //utilisation ici de SimpleImage (rien à voir avec Symfony) : https://github.com/claviska/SimpleImage
+                $simpleImage = new \claviska\SimpleImage();
+                $simpleImage->fromFile($this->getParameter('upload_directory') . '/original/' . $newFilename)
+                    ->bestFit(200, 200)
+                    ->toFile($this->getParameter('upload_directory') . '/small/' . $newFilename);
+
+                //hydrate le nom du fichier dans l'entité
                 $user->setPicture($newFilename);
             }
 
@@ -58,7 +63,7 @@ class UserController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'Votre profil a bien été modifié !');
-            return $this->redirectToRoute('user_profile');
+            return $this->redirectToRoute('user_profile', ['id' => $user->getId()]);
         }
 
         return $this->render('user/profile_edit.html.twig', [

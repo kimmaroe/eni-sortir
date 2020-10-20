@@ -9,13 +9,14 @@
             <div class="mr-6">
                 {{ form_row(searchForm.campus) }}
                 {{ form_row(searchForm.keyword) }}
-                <div class="block text-gray-700 text-sm font-bold mb-2 required">Dates de début de la sortie...</div>
-                <div class="all-inline dates-special">
+            </div>
+            <div class="mr-6">
+                <div class="">
                     {{ form_row(searchForm.dateStart) }}
                     {{ form_row(searchForm.dateEnd) }}
                 </div>
             </div>
-            <div>
+            <div class="mr-6">
                 <div class="block text-gray-700 text-sm font-bold mb-2 required">Inclure les sorties auxquelles...</div>
                 <div class="all-inline checkbox">
                     {{ form_widget(searchForm.includeRegistered) }}
@@ -25,6 +26,8 @@
                     {{ form_widget(searchForm.includeNotRegistered) }}
                     {{ form_label(searchForm.includeNotRegistered) }}
                 </div>
+            </div>
+            <div>
                 {{ form_row(searchForm.submit) }}
             </div>
         </div>

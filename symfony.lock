@@ -1,4 +1,7 @@
 {
+    "claviska/simpleimage": {
+        "version": "3.4.0"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99"
     },
@@ -133,6 +136,9 @@
             "./config/packages/jms_serializer.yaml",
             "./config/packages/prod/jms_serializer.yaml"
         ]
+    },
+    "league/color-extractor": {
+        "version": "0.3.2"
     },
     "monolog/monolog": {
         "version": "1.25.5"
