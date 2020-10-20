@@ -97,7 +97,7 @@ class EventRepository extends ServiceEntityRepository
         $qb->setParameter('me', $currentUser);
         //@todo : paginer les résultats
 
-        $qb->setMaxResults(20);
+        $qb->setMaxResults(16);
         $qb->addOrderBy('e.dateRegistrationEnded', 'ASC');
         $query = $qb->getQuery();
         //dd($query);

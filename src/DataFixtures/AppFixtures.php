@@ -146,7 +146,7 @@ class AppFixtures extends Fixture
                 $states = $this->manager->getRepository(EventState::class)->findStatesBetween(['Passée', 'Annulée']);
             }
             elseif ($event->getDateStart() < $now && $event->getDateEnd() > $now) {
-                $states = $this->manager->getRepository(EventState::class)->findStatesBetween(['Activité en cours']);
+                $states = $this->manager->getRepository(EventState::class)->findStatesBetween(['En cours']);
             }
             elseif ($event->getDateStart() > $now && $event->getDateRegistrationEnded() < $now) {
                 $states = $this->manager->getRepository(EventState::class)->findStatesBetween(['Clôturée']);

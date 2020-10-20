@@ -321,4 +321,17 @@ class Event
 
         return $this;
     }
+
+    public function getCssClass(User $user)
+    {
+        $class = "white-card";
+        $stateName = $this->getState()->getName();
+        if ($stateName === EventState::CLOSED || $stateName === EventState::CANCELED){
+            $class = "red-card";
+        }
+        elseif($stateName === EventState::OPEN || $this->isRegistered($user)){
+            $class = "green-card";
+        }
+        return $class;
+    }
 }

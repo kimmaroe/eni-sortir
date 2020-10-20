@@ -34,43 +34,35 @@
         {{ form_end(searchForm) }}
     </div>
 
-    <table class="table-auto">
-        <thead>
-            <tr>
-                <th class="px-4 py-2">Titre</th>
-                <th class="px-4 py-2">Date</th>
-                <th class="px-4 py-2 hidden md:table-cell">Clôture</th>
-                <th class="px-4 py-2 hidden lg:table-cell">Inscrits / places</th>
-                <th class="px-4 py-2">État</th>
-                <th class="px-4 py-2 hidden md:table-cell">Inscrit</th>
-                <th class="px-4 py-2 hidden lg:table-cell">Organisateur</th>
-                <th class="px-4 py-2">Actions</th>
-            </tr>
-        </thead>
+    <section class="home-event-cards">
         {% for event in events %}
-            <tr class="">
-                <td class="border px-4 py-2">
+            <article class="{{ event.getCssClass(app.user) }}">
+                <div class="card-title">
                     {# voir le security voter pour comprendre ce is_granted ! #}
                     {% if is_granted('view', event) %}
-                        <a href="{{ path('event_detail', {'id': event.id}) }}">{{ event.id }} {{ event.title }}</a>
+                        <a href="{{ path('event_detail', {'id': event.id}) }}">{{ event.title }}</a>
                     {% else %}
                         {{ event.id }} {{ event.title }}
                     {% endif %}
-                </td>
-                <td class="border px-4 py-2">{{ event.dateStart|date('d-m-Y à H:i') }}</td>
-                <td class="border px-4 py-2 hidden md:table-cell">{{ event.dateRegistrationEnded|date('d-m-Y à H:i') }}</td>
-                <td class="border px-4 py-2 hidden lg:table-cell">{{ event.registrations|length }} / {{ event.maxRegistrations }}</td>
-                <td class="border px-4 py-2">{{ event.state.name }}</td>
-                <td class="border px-4 py-2 hidden md:table-cell">{{ event.isRegistered(app.user) ? 'X' : '' }}</td>
-                <td class="border px-4 py-2 hidden lg:table-cell">{{ event.creator.fullName }}</a></td>
-                <td class="border px-4 py-2 actions">
+                </div>
+                <div class="card-date-start">Le {{ event.dateStart|format_datetime("long", "short", locale="fr") }}</div>
+                <div class="card-state">Cette sortie est {{ event.state.name|lower }}</div>
+                {% if event.state.name == "ouverte" %}
+                <div class="card-date">Inscriptions ouvertes jusqu'au {{ event.dateRegistrationEnded|date('d-m') }} !</div>
+                {% endif %}
+                <div class="card-max-registration">{{ event.registrations|length }} / {{ event.maxRegistrations }}</div>
+                {% if event.isRegistered(app.user) %}
+                <div class="">Vous êtes inscrit !!</div>
+                {% endif %}
+                <div class="">Organisée par <a href="{{ path('user_profile', {id: event.creator.id}) }}">{{ event.creator.fullName }}</a></div>
+                <div class="actions">
                     {% if is_granted('view', event) %}
                         <a href="{{ path('event_detail', {'id': event.id}) }}">Afficher</a>
                     {% endif %}
                     {% include 'inc/event_actions_link.html.twig' %}
-                </td>
-            </tr>
+                </div>
+            </article>
         {% endfor %}
-    </table>
+    </section>
 
 {% endblock %}
