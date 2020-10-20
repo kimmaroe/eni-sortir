@@ -36,8 +36,12 @@ security:
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
 
-    # Easy way to control access for large sections of your site
+    # donne tous les droits des student aux admin
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_STUDENT
+
     # Note: Only the *first* access control that matches will be used
+    # les IS_AUTHENTICATED_ANONYMOUSLY s'assurent que cette route n'est pas protégée !
     access_control:
         - { path: ^/connexion$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/inscription$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
