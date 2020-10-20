@@ -119,4 +119,17 @@ class AdminUserController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/activation-de-compte/{id}", name="account_activation_toggle")
+     */
+    public function accountActivationToggle(User $user, EntityManagerInterface $entityManager)
+    {
+        $user->setIsActive(!$user->getIsActive());
+        $entityManager->persist($user);
+        $entityManager->flush();
+        $message = $user->getIsActive() ? "L'utilisateur a bien été activé !" : "L'utilisateur a bien été désactivé !";
+        $this->addFlash('success', $message);
+        return $this->redirectToRoute('admin_user_list');
+    }
+
 }

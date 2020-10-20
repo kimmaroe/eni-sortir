@@ -17,6 +17,7 @@
             <th>Prénom</th>
             <th>Email</th>
             <th>Campus</th>
+            <th>Statut</th>
             <th>Actions</th>
         </tr>
         {% for user in users %}
@@ -26,7 +27,8 @@
             <td class="border px-4 py-2">{{ user.firstName }}</td>
             <td class="border px-4 py-2">{{ user.email }}</td>
             <td class="border px-4 py-2">{{ user.campus.name }}</td>
-            <td class="border px-4 py-2"></td>
+            <td class="border px-4 py-2">{{ user.isActive ? 'Actif' : 'Inactif' }}</td>
+            <td class="border px-4 py-2"><a href="{{ path('admin_user_account_activation_toggle', {'id': user.id}) }}">{{ user.isActive ? 'Désactiver' : 'Activer' }}</a></td>
         </tr>
         {% endfor %}
     </table>

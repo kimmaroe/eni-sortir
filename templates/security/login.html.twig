@@ -12,6 +12,7 @@
             {{ form_widget(loginForm.remember_me) }}
             {{ form_label(loginForm.remember_me) }}
         </div>
+    {{ form_errors(loginForm) }}
     {{ form_end(loginForm) }}
 
     <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>
