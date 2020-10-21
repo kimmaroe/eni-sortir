@@ -1,7 +1,8 @@
 body {
-    background-image: url('https://source.unsplash.com/weekly?fun'); /* image random à chaque jour, avec mot-clef "fun" */
+    background-image: url('../img/bg.jpg');
     background-attachment: fixed;
     background-size: cover;
+    background-position: center center;
 }
 
 body > .container {
