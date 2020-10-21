@@ -1,0 +1,15 @@
+<nav class="pagination">
+    {% if pagination.previousPage %}
+        <a href="{{ path('home', {page: pagination.previousPage}) }}"><< Précédentes</a>
+    {% else %}
+        <div class="disabled-link"><< Précédentes</div>
+    {% endif %}
+
+        <div class="hidden sm:block">Affichage des sorties {{ pagination.firstResultNumber }} à {{ pagination.lastResultNumber }} sur {{ pagination.maxResultsCount }}</div>
+
+    {% if pagination.nextPage %}
+        <a href="{{ path('home', {page: pagination.nextPage}) }}">Suivantes >></a>
+    {% else %}
+        <div class="disabled-link">Suivantes >></div>
+    {% endif %}
+</nav>

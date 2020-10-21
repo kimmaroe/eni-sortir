@@ -12,9 +12,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     /**
-     * @Route("/", name="home")
+     * Recherche et affichage des sorties, avec pagination !
+     * @Route("/{page}", name="home", requirements={"page": "\d+"}, defaults={"page": 1})
      */
-    public function home(EventRepository $eventRepository, Request $request)
+    public function home(EventRepository $eventRepository, Request $request, int $page = 1)
     {
         //entité entièrement bidon, non sauvegardée en bdd... juste pour aller avec le form
         $searchEvent = new SearchEvent();
@@ -25,11 +26,13 @@ class DefaultController extends AbstractController
         $searchForm->handleRequest($request);
 
         //requête perso, voir le repository
-        $events = $eventRepository->searchEvents($searchEvent, $this->getUser());
+        //je passe mon entité bidon et le user au repository qui en a besoin
+        $resultInfos = $eventRepository->searchEvents($searchEvent, $this->getUser(), $page);
 
         return $this->render('default/home.html.twig', [
-            "events" => $events,
-            "searchForm" => $searchForm->createView()
+            "events" => $resultInfos['events'],
+            "pagination" => $resultInfos['pagination'],
+            "searchForm" => $searchForm->createView(),
         ]);
     }
 }

@@ -7,6 +7,7 @@ use App\Entity\EventState;
 use App\Entity\Registration;
 use App\Entity\SearchEvent;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
 use function Doctrine\ORM\QueryBuilder;
@@ -24,7 +25,7 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
-    public function searchEvents(SearchEvent $searchData, UserInterface $currentUser)
+    public function searchEvents(SearchEvent $searchData, UserInterface $currentUser, int $page)
     {
         $qb = $this->createQueryBuilder('e')
             ->leftJoin('e.registrations', 'r')->addSelect('r')
@@ -95,14 +96,39 @@ class EventRepository extends ServiceEntityRepository
 
         $qb->andWhere($orExpression);
         $qb->setParameter('me', $currentUser);
-        //@todo : paginer les résultats
 
-        $qb->setMaxResults(16);
+        //nombre de résultats par page
+        $numberOfResultsPerPage = 18;
+        $qb->setMaxResults($numberOfResultsPerPage);
+
+        //le nombre de premiers résultats à omettre
+        $offset = ($numberOfResultsPerPage * $page) - $numberOfResultsPerPage;
+        $qb->setFirstResult($offset);
+
         $qb->addOrderBy('e.dateRegistrationEnded', 'ASC');
         $query = $qb->getQuery();
-        //dd($query);
-        $results = $query->getResult();
-        return $results;
+
+        //donne des infos sur le nombre max de résultats et gère les relations correctement
+        $paginator = new Paginator($query);
+
+        //on ne peut retourner qu'une seule variable, alors je met les résultats et des infos de pagination
+        //dans un tableau contenant tout ça
+        $infos = [
+            'events' => $paginator,
+            'pagination' => [
+                'currentPage' => $page,
+                'perPage' => $numberOfResultsPerPage,
+                'firstResultNumber' => $offset+1,
+                'lastResultNumber' => ($page * $numberOfResultsPerPage) < $paginator->count() ? $offset+$numberOfResultsPerPage : $paginator->count(),
+                //combien de résultats auraient été retournés si nous n'en avions pas limité le nombre
+                'maxResultsCount' => $paginator->count(),
+                'previousPage' => $page > 1 ? $page-1 : false,
+                'nextPage' => ($page * $numberOfResultsPerPage) < $paginator->count() ? $page+1 : false,
+            ]
+        ];
+
+        dump($infos);
+        return $infos;
     }
 
     public function findOldEventsToArchive()

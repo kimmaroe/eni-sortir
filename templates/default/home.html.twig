@@ -34,6 +34,8 @@
         {{ form_end(searchForm) }}
     </div>
 
+    {% include 'inc/pagination.html.twig' %}
+
     <section class="home-event-cards">
         {% for event in events %}
             <article class="{{ event.getCssClass(app.user) }}">
@@ -65,4 +67,5 @@
         {% endfor %}
     </section>
 
+    {% include 'inc/pagination.html.twig' %}
 {% endblock %}
