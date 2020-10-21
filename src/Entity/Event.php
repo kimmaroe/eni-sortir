@@ -119,24 +119,24 @@ class Event
         return $this;
     }
 
-    public function getDateStart(): ?\DateTimeInterface
+    public function getDateStart(): ?\DateTime
     {
         return $this->dateStart;
     }
 
-    public function setDateStart(\DateTimeInterface $dateStart): self
+    public function setDateStart(\DateTime $dateStart): self
     {
         $this->dateStart = $dateStart;
 
         return $this;
     }
 
-    public function getDateEnd(): ?\DateTimeInterface
+    public function getDateEnd(): ?\DateTime
     {
         return $this->dateEnd;
     }
 
-    public function setDateEnd(\DateTimeInterface $dateEnd): self
+    public function setDateEnd(\DateTime $dateEnd): self
     {
         $this->dateEnd = $dateEnd;
 
@@ -179,24 +179,24 @@ class Event
         return $this;
     }
 
-    public function getDateCreated(): ?\DateTimeInterface
+    public function getDateCreated(): ?\DateTime
     {
         return $this->dateCreated;
     }
 
-    public function setDateCreated(\DateTimeInterface $dateCreated): self
+    public function setDateCreated(\DateTime $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 
         return $this;
     }
 
-    public function getDateUpdated(): ?\DateTimeInterface
+    public function getDateUpdated(): ?\DateTime
     {
         return $this->dateUpdated;
     }
 
-    public function setDateUpdated(?\DateTimeInterface $dateUpdated): self
+    public function setDateUpdated(?\DateTime $dateUpdated): self
     {
         $this->dateUpdated = $dateUpdated;
 
@@ -246,12 +246,12 @@ class Event
         return $this;
     }
 
-    public function getDateRegistrationEnded(): ?\DateTimeInterface
+    public function getDateRegistrationEnded(): ?\DateTime
     {
         return $this->dateRegistrationEnded;
     }
 
-    public function setDateRegistrationEnded(\DateTimeInterface $dateRegistrationEnded): self
+    public function setDateRegistrationEnded(\DateTime $dateRegistrationEnded): self
     {
         $this->dateRegistrationEnded = $dateRegistrationEnded;
 

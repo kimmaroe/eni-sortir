@@ -10,6 +10,8 @@ use App\Entity\EventState;
 use App\Entity\Location;
 use App\Entity\Registration;
 use App\Entity\User;
+use App\Repository\EventRepository;
+use App\Repository\EventStateRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -56,6 +58,7 @@ class AppFixtures extends Fixture
 
     private function loadCancelations()
     {
+        /** @var EventRepository $eventRepo */
         $eventRepo = $this->manager->getRepository(Event::class);
         $canceledEvents = $eventRepo->findCancelledEvents();
         foreach($canceledEvents as $event){
@@ -173,17 +176,19 @@ class AppFixtures extends Fixture
             $event->setMaxRegistrations($this->faker->numberBetween(4, 100));
             $event->setCreator($this->faker->randomElement($allUsers));
 
+            /** @var EventStateRepository $eventStateRepo */
+            $eventStateRepo = $this->manager->getRepository(EventState::class);
             if ($event->getDateEnd() < $now){
-                $states = $this->manager->getRepository(EventState::class)->findStatesBetween(['Passée', 'Annulée']);
+                $states = $eventStateRepo->findStatesBetween(['Passée', 'Annulée']);
             }
             elseif ($event->getDateStart() < $now && $event->getDateEnd() > $now) {
-                $states = $this->manager->getRepository(EventState::class)->findStatesBetween(['En cours']);
+                $states = $eventStateRepo->findStatesBetween(['En cours']);
             }
             elseif ($event->getDateStart() > $now && $event->getDateRegistrationEnded() < $now) {
-                $states = $this->manager->getRepository(EventState::class)->findStatesBetween(['Clôturée']);
+                $states = $eventStateRepo->findStatesBetween(['Clôturée']);
             }
             else {
-                $states = $this->manager->getRepository(EventState::class)->findStatesBetween(['Créée', 'Ouverte']);
+                $states = $eventStateRepo->findStatesBetween(['Créée', 'Ouverte']);
             }
 
             $event->setState($this->faker->randomElement($states));

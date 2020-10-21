@@ -19,6 +19,10 @@ class EventStateRepository extends ServiceEntityRepository
         parent::__construct($registry, EventState::class);
     }
 
+    /**
+     * @param array $stateNames
+     * @return int|mixed|string
+     */
     public function findStatesBetween(array $stateNames)
     {
         $qb = $this->createQueryBuilder('s');

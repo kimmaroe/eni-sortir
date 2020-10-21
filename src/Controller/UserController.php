@@ -34,7 +34,7 @@ class UserController extends AbstractController
 
         if ($profileForm->isSubmitted() && $profileForm->isValid()){
             $user->setDateUpdated(new \DateTime());
-            /** @var UploadedFile $brochureFile */
+            /** @var UploadedFile $pictureFile */
             $pictureFile = $profileForm->get('pictureFile')->getData();
 
             if ($pictureFile) {

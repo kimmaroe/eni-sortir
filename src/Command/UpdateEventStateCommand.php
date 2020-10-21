@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Event;
 use App\Entity\EventState;
+use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -67,6 +68,7 @@ class UpdateEventStateCommand extends Command
 
     protected function reopenEvents()
     {
+        /** @var EventRepository $eventRepository */
         $eventRepository = $this->entityManager->getRepository(Event::class);
 
         //les événements dont l'inscription doit être fermée maintenant
@@ -89,6 +91,7 @@ class UpdateEventStateCommand extends Command
 
     protected function closeEvents()
     {
+        /** @var EventRepository $eventRepository */
         $eventRepository = $this->entityManager->getRepository(Event::class);
 
         //les événements dont l'inscription doit être fermée maintenant
@@ -111,6 +114,7 @@ class UpdateEventStateCommand extends Command
 
     protected function archiveEvents()
     {
+        /** @var EventRepository $eventRepository */
         $eventRepository = $this->entityManager->getRepository(Event::class);
 
         //trouve les sorties actuellement terminée ou annulée depuis un mois pour les archiver

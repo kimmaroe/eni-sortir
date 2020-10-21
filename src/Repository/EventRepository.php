@@ -10,7 +10,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
-use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Event|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,6 +24,12 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
+    /**
+     * @param SearchEvent $searchData
+     * @param UserInterface $currentUser
+     * @param int $page
+     * @return array
+     */
     public function searchEvents(SearchEvent $searchData, UserInterface $currentUser, int $page)
     {
         $qb = $this->createQueryBuilder('e')
@@ -61,9 +66,11 @@ class EventRepository extends ServiceEntityRepository
         }
 
         //date de fin
-        if ($searchData->getDateEnd()){
+        /** @var \DateTime $dateEnd */
+        $dateEnd = $searchData->getDateEnd();
+        if ($dateEnd){
             //on ajoute les heures pour que ce soit vraiment plus OU ÉGAL
-            $dateMax = $searchData->getDateEnd()->setTime(23,59,59);
+            $dateMax = $dateEnd->setTime(23,59,59);
             $qb->andWhere('e.dateStart <= :de')->setParameter('de', $dateMax);
         }
 
@@ -131,6 +138,9 @@ class EventRepository extends ServiceEntityRepository
         return $infos;
     }
 
+    /**
+     * @return int|mixed|string
+     */
     public function findOldEventsToArchive()
     {
         $qb = $this->createQueryBuilder('e');
@@ -143,6 +153,9 @@ class EventRepository extends ServiceEntityRepository
         return $result;
     }
 
+    /**
+     * @return int|mixed|string
+     */
     public function findEventsToClose()
     {
         //ici je le fais en DQL, je ne m'en sort pas avec le querybuilder :D
@@ -168,6 +181,9 @@ class EventRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * @return int|mixed|string
+     */
     public function findEventsToReopen()
     {
         //sélectionne les événements fermées ayant, suite à une désincription par exemple, un nombre de places disponible
@@ -191,6 +207,9 @@ class EventRepository extends ServiceEntityRepository
         return $result;
     }
 
+    /**
+     * @return int|mixed|string
+     */
     public function findCancelledEvents()
     {
         $qb =
