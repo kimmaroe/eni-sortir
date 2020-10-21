@@ -190,4 +190,14 @@ class EventRepository extends ServiceEntityRepository
         $result = $query->getResult();
         return $result;
     }
+
+    public function findCancelledEvents()
+    {
+        $qb =
+            $this->createQueryBuilder('e')
+            ->join('e.state', 's')
+            ->where('s.name = :canceledStateName')
+            ->setParameter('canceledStateName', EventState::CANCELED);
+        return $qb->getQuery()->getResult();
+    }
 }

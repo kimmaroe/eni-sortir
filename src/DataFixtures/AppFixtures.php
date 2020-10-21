@@ -5,17 +5,22 @@ namespace App\DataFixtures;
 use App\Entity\Campus;
 use App\Entity\City;
 use App\Entity\Event;
+use App\Entity\EventCancelation;
 use App\Entity\EventState;
 use App\Entity\Location;
 use App\Entity\Registration;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
     private $passwordEncoder;
+
+    /** @var EntityManagerInterface */
     private $manager;
     private $faker;
 
@@ -28,14 +33,40 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $this->manager = $manager;
+        $output = new ConsoleOutput();
 
+        $output->writeln('loading cities...');
         $this->loadCities();
+        $output->writeln('loading locations...');
         $this->loadLocations();
+        $output->writeln('loading event states...');
         $this->loadStates();
+        $output->writeln('loading campuses...');
         $this->loadCampus();
+        $output->writeln('loading users...');
         $this->loadUsers();
+        $output->writeln('loading events...');
         $this->loadEvents();
+        $output->writeln('loading event registrations...');
         $this->loadRegistrations();
+        $output->writeln('loading event cancelations...');
+        $this->loadCancelations();
+        $output->writeln('Done!');
+    }
+
+    private function loadCancelations()
+    {
+        $eventRepo = $this->manager->getRepository(Event::class);
+        $canceledEvents = $eventRepo->findCancelledEvents();
+        foreach($canceledEvents as $event){
+            $cancelation = new EventCancelation();
+            $cancelation->setEvent($event);
+            $cancelation->setDateCanceled($this->faker->dateTimeBetween($event->getDateCreated(), $event->getDateStart()));
+            $cancelation->setReason($this->faker->text());
+
+            $this->manager->persist($cancelation);
+        }
+        $this->manager->flush();
     }
 
     private function loadLocations()
@@ -166,7 +197,7 @@ class AppFixtures extends Fixture
 
     private function loadStates()
     {
-        $stateNames = ["Créée", "Ouverte", "Clôturée", "Activité en cours", "Passée", "Annulée", "Archivée"];
+        $stateNames = ["Créée", "Ouverte", "Clôturée", "En cours", "Passée", "Annulée", "Archivée"];
         foreach($stateNames as $name) {
             $state = new EventState($name);
             $this->manager->persist($state);
