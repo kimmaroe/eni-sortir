@@ -134,7 +134,6 @@ class EventRepository extends ServiceEntityRepository
             ]
         ];
 
-        dump($infos);
         return $infos;
     }
 
