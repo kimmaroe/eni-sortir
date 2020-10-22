@@ -30,7 +30,7 @@ class SecurityController extends AbstractController
 
         // get the login error if there is one
         if ($lastError = $authenticationUtils->getLastAuthenticationError()){
-            $loginForm->addError(new FormError($lastError->getMessage()));
+            $loginForm->addError(new FormError('Mauvais identifiants !'));
         }
 
         return $this->render('security/login.html.twig', [

@@ -19,8 +19,8 @@ class DefaultControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         $this->assertResponseIsSuccessful('homepage should work duh');
-        $this->assertSelectorTextContains('h1', 'Sortir.com', 'there should be a h1 with Sortir.com text inside');
-        $this->assertEquals(21, $crawler->filter('tr')->count(), 'we should have 20 events + 1 tr for the table header');
+        $this->assertSelectorTextContains('.logo', 'Sortir.com', 'there should be a h1 with Sortir.com text inside');
+        $this->assertEquals(18, $crawler->filter('.card-date-start')->count(), 'we should have 18 events');
     }
 
     public function testHomepageIsLocked()
